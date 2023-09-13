@@ -5,6 +5,9 @@ This contains simple projects using the [NXP K66 Freedom Dev Board](https://www.
 The projects are adapted from the SDK examples:
 
 - `1_led_blinky` blinks on-board LED
+- `2_hello_world` prints "Hello world." to UART
+- `3_I2C` attempts to communicate to an I2C peripheral while printing the
+  exchanged data to UART
 
 ## Setup
 

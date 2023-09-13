@@ -22,16 +22,16 @@ SET(EXECUTABLE_OUTPUT_PATH ${ProjDirPath}/${CMAKE_BUILD_TYPE})
 SET(LIBRARY_OUTPUT_PATH ${ProjDirPath}/${CMAKE_BUILD_TYPE})
 
 
-project(hello_world)
+project(i2c_interrupt_b2b_transfer_master)
 
-set(MCUX_SDK_PROJECT_NAME hello_world.elf)
+set(MCUX_SDK_PROJECT_NAME i2c_interrupt_b2b_transfer_master.elf)
 
 include(${ProjDirPath}/flags.cmake)
 
 include(${ProjDirPath}/config.cmake)
 
 add_executable(${MCUX_SDK_PROJECT_NAME} 
-   "${ProjDirPath}/../hello_world.c"
+   "${ProjDirPath}/../i2c_interrupt_b2b_transfer_master.c"
    "${ProjDirPath}/../board/board.c"
    "${ProjDirPath}/../board/board.h"
    "${ProjDirPath}/../board/pin_mux.c"
@@ -74,6 +74,7 @@ include(driver_smc_MK66F18)
 include(CMSIS_Include_core_cm_MK66F18)
 include(utilities_misc_utilities_MK66F18)
 include(device_MK66F18_system_MK66F18)
+include(driver_i2c_MK66F18)
 
 target_link_libraries(${MCUX_SDK_PROJECT_NAME} PRIVATE -Wl,--start-group)
 target_link_libraries(${MCUX_SDK_PROJECT_NAME} PRIVATE m)

@@ -44,7 +44,7 @@ target_include_directories(${MCUX_SDK_PROJECT_NAME} PRIVATE
    ${ProjDirPath}/..
    )
 
-set(SDK_DIR "C:/Users/Jkastelic/Documents/prog/SDK_2_11_0_FRDM-K66F")
+set(SDK_DIR "../../../SDK_2_11_0_FRDM-K66F")
 
 set(CMAKE_MODULE_PATH
    ${SDK_DIR}/devices/MK66F18/utilities/debug_console_lite
