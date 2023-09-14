@@ -115,7 +115,7 @@ void setup_LMK05028(void)
 
    // toggle PLL1 off and on again
    write_reg(0x00, 0x5a, 0x03);
-   SysTick_DelayTicks(500U);
+   SysTick_DelayTicks(100U);
    write_reg(0x00, 0x5a, 0x02);
 }
 
@@ -137,6 +137,14 @@ int main(void)
    while (1) {
       char cmd = GETCHAR();
       switch (cmd) {
+         case '?' : // identify the MPU board
+            PRINTF("LMK programmer code by JK.\r\n");
+            break;
+
+         case 'R' : // repeat setup of the LMK05028
+            setup_LMK05028();
+            break;
+
          case '0' : // turn PLL1 off
             write_reg(0x00, 0x5a, 0x03);
             break;
