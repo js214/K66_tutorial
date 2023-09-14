@@ -145,12 +145,14 @@ int main(void)
             setup_LMK05028();
             break;
 
-         case '0' : // turn PLL1 off
+         case '0' : // turn PLLx_PDN = 1
             write_reg(0x00, 0x5a, 0x03);
+            write_reg(0x00, 0x60, 0x03);
             break;
 
-         case '1' : // turn PLL1 on
+         case '1' : // turn PLLx_PDN = 1
             write_reg(0x00, 0x5a, 0x02);
+            write_reg(0x00, 0x60, 0x02);
             break;
 
          case 't' : // set PLL2 numerator (10 MHz out)
