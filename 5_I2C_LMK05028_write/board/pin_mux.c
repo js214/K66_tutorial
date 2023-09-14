@@ -7,11 +7,13 @@
 /*
  * TEXT BELOW IS USED AS SETTING FOR TOOLS *************************************
 !!GlobalInfo
-product: Pins v9.0
+product: Pins v14.0
 processor: MK66FN2M0xxx18
 package_id: MK66FN2M0VMD18
 mcu_data: ksdk2_0
-processor_version: 9.0.0
+processor_version: 14.0.0
+board: FRDM-K66F
+external_user_signals: {}
  * BE CAREFUL MODIFYING THIS COMMENT - IT IS YAML SETTINGS FOR TOOLS ***********
  */
 /* clang-format on */
@@ -35,7 +37,7 @@ void BOARD_InitBootPins(void)
 /*
  * TEXT BELOW IS USED AS SETTING FOR TOOLS *************************************
 BOARD_InitPins:
-- options: {callFromInitBoot: 'true', coreID: core0, enableClock: 'true'}
+- options: {callFromInitBoot: 'true', prefix: BOARD_, coreID: core0, enableClock: 'true'}
 - pin_list:
   - {pin_num: E10, peripheral: UART0, signal: RX, pin_signal: TSI0_CH9/PTB16/SPI1_SOUT/UART0_RX/FTM_CLKIN0/FB_AD17/SDRAM_D17/EWM_IN/TPM_CLKIN0}
   - {pin_num: E9, peripheral: UART0, signal: TX, pin_signal: TSI0_CH10/PTB17/SPI1_SIN/UART0_TX/FTM_CLKIN1/FB_AD16/SDRAM_D16/EWM_OUT_b/TPM_CLKIN1}
@@ -59,44 +61,44 @@ void BOARD_InitPins(void)
     CLOCK_EnableClock(kCLOCK_PortB);
 
     /* PORTB16 (pin E10) is configured as UART0_RX */
-    PORT_SetPinMux(PORTB, 16U, kPORT_MuxAlt3);
+    PORT_SetPinMux(BOARD_DEBUG_UART_RX_PORT, BOARD_DEBUG_UART_RX_PIN, kPORT_MuxAlt3);
 
     /* PORTB17 (pin E9) is configured as UART0_TX */
-    PORT_SetPinMux(PORTB, 17U, kPORT_MuxAlt3);
+    PORT_SetPinMux(BOARD_DEBUG_UART_TX_PORT, BOARD_DEBUG_UART_TX_PIN, kPORT_MuxAlt3);
 
-    const port_pin_config_t portb2_pinG12_config = {/* Internal pull-up resistor is enabled */
-                                                    kPORT_PullUp,
-                                                    /* Fast slew rate is configured */
-                                                    kPORT_FastSlewRate,
-                                                    /* Passive filter is disabled */
-                                                    kPORT_PassiveFilterDisable,
-                                                    /* Open drain is enabled */
-                                                    kPORT_OpenDrainEnable,
-                                                    /* Low drive strength is configured */
-                                                    kPORT_LowDriveStrength,
-                                                    /* Pin is configured as I2C0_SCL */
-                                                    kPORT_MuxAlt2,
-                                                    /* Pin Control Register fields [15:0] are not locked */
-                                                    kPORT_UnlockRegister};
+    const port_pin_config_t ADC0_SE12 = {/* Internal pull-up resistor is enabled */
+                                         kPORT_PullUp,
+                                         /* Fast slew rate is configured */
+                                         kPORT_FastSlewRate,
+                                         /* Passive filter is disabled */
+                                         kPORT_PassiveFilterDisable,
+                                         /* Open drain is enabled */
+                                         kPORT_OpenDrainEnable,
+                                         /* Low drive strength is configured */
+                                         kPORT_LowDriveStrength,
+                                         /* Pin is configured as I2C0_SCL */
+                                         kPORT_MuxAlt2,
+                                         /* Pin Control Register fields [15:0] are not locked */
+                                         kPORT_UnlockRegister};
     /* PORTB2 (pin G12) is configured as I2C0_SCL */
-    PORT_SetPinConfig(PORTB, 2U, &portb2_pinG12_config);
+    PORT_SetPinConfig(BOARD_ADC0_SE12_PORT, BOARD_ADC0_SE12_PIN, &ADC0_SE12);
 
-    const port_pin_config_t portb3_pinG11_config = {/* Internal pull-up resistor is enabled */
-                                                    kPORT_PullUp,
-                                                    /* Fast slew rate is configured */
-                                                    kPORT_FastSlewRate,
-                                                    /* Passive filter is disabled */
-                                                    kPORT_PassiveFilterDisable,
-                                                    /* Open drain is enabled */
-                                                    kPORT_OpenDrainEnable,
-                                                    /* Low drive strength is configured */
-                                                    kPORT_LowDriveStrength,
-                                                    /* Pin is configured as I2C0_SDA */
-                                                    kPORT_MuxAlt2,
-                                                    /* Pin Control Register fields [15:0] are not locked */
-                                                    kPORT_UnlockRegister};
+    const port_pin_config_t ADC0_SE13 = {/* Internal pull-up resistor is enabled */
+                                         kPORT_PullUp,
+                                         /* Fast slew rate is configured */
+                                         kPORT_FastSlewRate,
+                                         /* Passive filter is disabled */
+                                         kPORT_PassiveFilterDisable,
+                                         /* Open drain is enabled */
+                                         kPORT_OpenDrainEnable,
+                                         /* Low drive strength is configured */
+                                         kPORT_LowDriveStrength,
+                                         /* Pin is configured as I2C0_SDA */
+                                         kPORT_MuxAlt2,
+                                         /* Pin Control Register fields [15:0] are not locked */
+                                         kPORT_UnlockRegister};
     /* PORTB3 (pin G11) is configured as I2C0_SDA */
-    PORT_SetPinConfig(PORTB, 3U, &portb3_pinG11_config);
+    PORT_SetPinConfig(BOARD_ADC0_SE13_PORT, BOARD_ADC0_SE13_PIN, &ADC0_SE13);
 
     SIM->SOPT5 = ((SIM->SOPT5 &
                    /* Mask bits to zero which are setting */
