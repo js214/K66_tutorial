@@ -8,6 +8,7 @@ The projects are adapted from the SDK examples:
 - `2_hello_world` prints "Hello world." to UART
 - `3_I2C` attempts to communicate to an I2C peripheral while printing the
   exchanged data to UART
+- `4_I2C_LMK05028_read` reads out the registers on the LMK05028
 
 ## Setup
 
