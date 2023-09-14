@@ -9,6 +9,7 @@ The projects are adapted from the SDK examples:
 - `3_I2C` attempts to communicate to an I2C peripheral while printing the
   exchanged data to UART
 - `4_I2C_LMK05028_read` reads out the registers on the LMK05028
+- `5_I2C_LMK05028_write` writes to all registers of LMK05028
 
 ## Setup
 

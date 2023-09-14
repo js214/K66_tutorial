@@ -9,9 +9,6 @@
 #include "board/pin_mux.h"
 #include "board/board.h"
 
-// project-specific files
-#include "LMK05028_reg.h"
-
 // I2C parameters
 #define I2C_MASTER_CLK_SRC   I2C0_CLK_SRC
 #define I2C_MASTER_CLK_FREQ  CLOCK_GetFreq(I2C0_CLK_SRC)
