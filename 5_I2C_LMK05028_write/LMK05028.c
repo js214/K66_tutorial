@@ -119,6 +119,16 @@ void setup_LMK05028(void)
    write_reg(0x00, 0x5a, 0x02);
 }
 
+// set PLL2 numerator
+void set_PLL2_num(const uint64_t num)
+{
+   write_reg(0x00, 0x83, (uint8_t)(num>>32));
+   write_reg(0x00, 0x84, (uint8_t)(num>>24));
+   write_reg(0x00, 0x85, (uint8_t)(num>>16));
+   write_reg(0x00, 0x86, (uint8_t)(num>>8));
+   write_reg(0x00, 0x87, (uint8_t)num);
+}
+
 int main(void)
 {
    setup_MCU();
@@ -127,32 +137,42 @@ int main(void)
    while (1) {
       char cmd = GETCHAR();
       switch (cmd) {
-         // turn PLL1 off
-         case '0' :
+         case '0' : // turn PLL1 off
             write_reg(0x00, 0x5a, 0x03);
             break;
 
-         // turn PLL1 on
-         case '1' :
+         case '1' : // turn PLL1 on
             write_reg(0x00, 0x5a, 0x02);
             break;
 
-         // set PLL2 numerator (10 MHz out)
-         case 't' :
-            write_reg(0x00, 0x83, 0x49);
-            write_reg(0x00, 0x84, 0x33);
-            write_reg(0x00, 0x85, 0x3c);
-            write_reg(0x00, 0x86, 0xcf);
-            write_reg(0x00, 0x87, 0x9c);
+         case 't' : // set PLL2 numerator (10 MHz out)
+            set_PLL2_num(314392235932);
             break;
 
-         // detune PLL2 numerator
-         case 'd' :
-            write_reg(0x00, 0x83, 0x49);
-            write_reg(0x00, 0x84, 0x33);
-            write_reg(0x00, 0x85, 0x4c);
-            write_reg(0x00, 0x86, 0xcf);
-            write_reg(0x00, 0x87, 0x9c);
+         case 'd' : // detune PLL2 numerator
+            set_PLL2_num(314391235932);
+            break;
+
+         case 'S' : // detune PLL2 just slightly
+            set_PLL2_num(314392235932 - 100000);
+            break;
+
+         case 'A' : // detune PLL2 just slightly (other direction)
+            set_PLL2_num(314392235932 + 100000);
+            break;
+
+         case 's' : // detune PLL2 even less
+            set_PLL2_num(314392235932 - 10000);
+            break;
+
+         case 'a' : // detune PLL2 even less (other direction)
+            set_PLL2_num(314392235932 + 10000);
+            break;
+
+         case 'j' : // drift the phase by 2*pi
+            set_PLL2_num(314385937276 * 1.00000003995);
+            SysTick_DelayTicks(1000U);
+            set_PLL2_num(314392235932);
             break;
       }
    }
