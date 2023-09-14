@@ -81,6 +81,7 @@ static uint8_t read_reg(const uint16_t reg_addr_h, const uint16_t reg_addr_l)
    // execute the I2C transfer
    I2C_MasterTransferNonBlocking(I2C_MASTER_BASEADDR, &g_m_handle, &masterXfer);
    while (!g_MasterCompletionFlag);
+   g_MasterCompletionFlag = false;
 
    return rxBuff[0];
 }
@@ -92,9 +93,13 @@ int main(void)
    BOARD_InitBootClocks();
    BOARD_InitDebugConsole();
 
-   // read a register value and print it over UART
-   uint8_t data = read_reg(0x00, 0x01);
-   PRINTF("0x%2x\r\n", data);
+   // read N register values and print them over UART
+   const int N = 0x311;
+   for (uint16_t i=0; i<N; i++) {
+      uint8_t data = read_reg((uint8_t)(i>>8), (uint8_t)i);
+      PRINTF("0x%4x : ", i);
+      PRINTF("0x%2x\r\n", data);
+   }
 
    while (1);
 }
