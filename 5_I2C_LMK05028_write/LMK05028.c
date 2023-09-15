@@ -21,6 +21,7 @@
 #define I2C_SLAVE_ADDR_7BIT  96U
 
 // global variables
+bool PLL2_detuned = false;
 const bool print_debug = false;
 volatile bool g_MasterCompletionFlag;
 volatile uint32_t g_systickCounter;
@@ -53,7 +54,7 @@ void SysTick_DelayTicks(uint32_t N)
  * @param reg_addr_l register address (low byte)
  * @param data one byte of data to write to the register
  */
-static uint8_t write_reg(const uint16_t reg_addr_h, const uint16_t reg_addr_l, const uint16_t data)
+uint8_t write_reg(const uint16_t reg_addr_h, const uint16_t reg_addr_l, const uint16_t data)
 {
    // initialize I2C config
    i2c_master_config_t masterConfig;
@@ -129,6 +130,18 @@ void set_PLL2_num(const uint64_t num)
    write_reg(0x00, 0x87, (uint8_t)num);
 }
 
+// detune PLL if not already detuned
+void detune_PLL2(const uint64_t amt)
+{
+   if (PLL2_detuned) {
+      set_PLL2_num(314392235932);
+      PLL2_detuned = false;
+   } else {
+      set_PLL2_num(314392235932 + amt);
+      PLL2_detuned = true;
+   }
+}
+
 int main(void)
 {
    setup_MCU();
@@ -155,28 +168,28 @@ int main(void)
             write_reg(0x00, 0x60, 0x02);
             break;
 
-         case 't' : // set PLL2 numerator (10 MHz out)
-            set_PLL2_num(314392235932);
+         case 'd' : // detune PLL2, neg, small
+            detune_PLL2(10000);
             break;
 
-         case 'd' : // detune PLL2 numerator
-            set_PLL2_num(314391235932);
+         case 'f' : // detune PLL2, pos, small
+            detune_PLL2(-10000);
             break;
 
-         case 'S' : // detune PLL2 just slightly
-            set_PLL2_num(314392235932 - 100000);
+         case 'a' : // detune PLL2, neg, medium
+            detune_PLL2(100000);
             break;
 
-         case 'A' : // detune PLL2 just slightly (other direction)
-            set_PLL2_num(314392235932 + 100000);
+         case 's' : // detune PLL2, pos, medium
+            detune_PLL2(-100000);
             break;
 
-         case 's' : // detune PLL2 even less
-            set_PLL2_num(314392235932 - 10000);
+         case 'e' : // detune PLL2, neg, large
+            detune_PLL2(1000000);
             break;
 
-         case 'a' : // detune PLL2 even less (other direction)
-            set_PLL2_num(314392235932 + 10000);
+         case 'r' : // detune PLL2, pos, large
+            detune_PLL2(-1000000);
             break;
 
          case 'j' : // drift the phase by 2*pi
