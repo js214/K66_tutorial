@@ -11,7 +11,8 @@ compile is included here.
 For this minimal project, all source code (except SDK libraries) is contained in
 `simple.c`.
 
-Certain board-specific configuration is contained in `board.c`, `board.h`.
+Certain board-specific configuration is contained in `board.c`, `board.h` (not
+sure what exactly!).
 
 In addition, `simple.mex` is used with MCUXpresso Config Tools to generate the
 files in the `board` directory:

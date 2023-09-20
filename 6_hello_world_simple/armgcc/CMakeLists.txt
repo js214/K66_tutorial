@@ -5,23 +5,26 @@ CMAKE_MINIMUM_REQUIRED (VERSION 3.10.0)
 # ENABLE ASM
 ENABLE_LANGUAGE(ASM)
 
+# prefix/suffix for library executable files
 SET(CMAKE_EXECUTABLE_LIBRARY_PREFIX)
 SET(CMAKE_EXECUTABLE_LIBRARY_SUFFIX)
 
 # CURRENT DIRECTORY
 SET(ProjDirPath ${CMAKE_CURRENT_SOURCE_DIR})
 
+# where to store the built executable files
 SET(EXECUTABLE_OUTPUT_PATH ${ProjDirPath}/${CMAKE_BUILD_TYPE})
 SET(LIBRARY_OUTPUT_PATH ${ProjDirPath}/${CMAKE_BUILD_TYPE})
 
+# project name
 project(simple)
-
 set(MCUX_SDK_PROJECT_NAME simple.elf)
 
+# misc settings
 include(${ProjDirPath}/flags.cmake)
-
 set(CONFIG_USE_driver_uart_MK66F18 true)
 
+# main source code for this project
 add_executable(${MCUX_SDK_PROJECT_NAME} 
    "${ProjDirPath}/../simple.c"
    "${ProjDirPath}/../board/board.c"
@@ -32,10 +35,7 @@ add_executable(${MCUX_SDK_PROJECT_NAME}
    "${ProjDirPath}/../board/clock_config.h"
    )
 
-target_include_directories(${MCUX_SDK_PROJECT_NAME} PRIVATE
-   ${ProjDirPath}/..
-   )
-
+# where the source code for the modules is found
 set(CMAKE_MODULE_PATH
    ${ProjDirPath}/../drivers
    ${ProjDirPath}/../utilities
