@@ -104,30 +104,40 @@ configuration of the kernel is done in `freertos/portable/FreeRTOSConfig.h`.
 To include `.c` and `.h` files into the project, CMake provides several
 similar-looking but subtly different commands:
 
-- `add_executable(name, source1, ...)`: Creates an executable target `name` from
-  the source files `source1, ...` The `name` must be unique in the project.
+- [`add_executable(name, source1,
+  ...)`](https://cmake.org/cmake/help/latest/command/add_executable.html):
+  Creates an executable target `name` from the source files `source1, ...` The
+  `name` must be unique in the project.
 
-- `add_library(name, source1, ...)`: Creates a library target `name` from the
-  source files. The `name` must be unique.
+- [`add_library(name, source1,
+  ...)`](https://cmake.org/cmake/help/latest/command/add_library.html): Creates
+  a library target `name` from the source files. The `name` must be unique.
 
-- `target_include_directories(target, dir1, ...)`: When compiling the `target`
-  (as created by either `add_executable` or `add_library`), the include
-  directories `dir1, ...` will be used to source the `.h` files for the
-  `#include` directives.
+- [`target_include_directories(target, dir1,
+  ...)`](https://cmake.org/cmake/help/latest/command/target_include_directories.html):
+  When compiling the `target` (as created by either `add_executable` or
+  `add_library`), the include directories `dir1, ...` will be used to source the
+  `.h` files for the `#include` directives.
 
-- `target_sources(target, source1, ...)`: Add source files `source1, ...` to the
-  `target` created in a previous invocation of `add_executable` or
-  `add_library`.
+- [`target_sources(target, source1,
+  ...)`](https://cmake.org/cmake/help/latest/command/target_sources.html): Add
+  source files `source1, ...` to the `target` created in a previous invocation
+  of `add_executable` or `add_library`.
 
-- `include(X)`: Inserts an `X.cmake` file. CMake looks for this file either
-  under its built-in modules (in the CMake module directory), or in paths
-  specified in the `CMAKE_MODULE_PATH` variable.
+- [`include(X)`](https://cmake.org/cmake/help/latest/command/include.html):
+  Inserts an `X.cmake` file. CMake looks for this file either under its built-in
+  modules (in the CMake module directory), or in paths specified in the
+  `CMAKE_MODULE_PATH` variable.
 
-- `add_subdirectory(source_dir, binary_dir)`: Include the module located in
-  `source_dir`. The auto-generated build files will be placed in `binary_dir`.
+- [`add_subdirectory(source_dir,
+  binary_dir)`](https://cmake.org/cmake/help/latest/command/add_subdirectory.html):
+  Include the module located in `source_dir`. The auto-generated build files
+  will be placed in `binary_dir`.
 
-- `include_directories(dir1, ...)`: Add `dir1, ...` to the list of directories
-  the compiler uses to source the `.h` files for the `#include` directives.
+- [`include_directories(dir1,
+  ...)`](https://cmake.org/cmake/help/latest/command/include_directories.html):
+  Add `dir1, ...` to the list of directories the compiler uses to source the
+  `.h` files for the `#include` directives.
 
 - [`target_link_libraries(target, lib1,
   ...)`](https://cmake.org/cmake/help/latest/command/target_link_libraries.html):
