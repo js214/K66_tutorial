@@ -1,30 +1,19 @@
-# CROSS COMPILER SETTING
-SET(CMAKE_SYSTEM_NAME Generic)
+# project name and directory
 CMAKE_MINIMUM_REQUIRED (VERSION 3.10.0)
+project(main.elf)
+SET(ProjDirPath ${CMAKE_CURRENT_SOURCE_DIR})
+SET(MCUX_SDK_PROJECT_NAME ${CMAKE_PROJECT_NAME})
 
-# ENABLE ASM
+# Misc cmake/compiler options
+SET(CMAKE_SYSTEM_NAME Generic)
 ENABLE_LANGUAGE(ASM)
-
-# prefix/suffix for library executable files
+include(${ProjDirPath}/flags.cmake)
 SET(CMAKE_EXECUTABLE_LIBRARY_PREFIX)
 SET(CMAKE_EXECUTABLE_LIBRARY_SUFFIX)
-
-# CURRENT DIRECTORY
-SET(ProjDirPath ${CMAKE_CURRENT_SOURCE_DIR})
-
-# where to store the built executable files
 SET(EXECUTABLE_OUTPUT_PATH ${ProjDirPath}/${CMAKE_BUILD_TYPE})
 SET(LIBRARY_OUTPUT_PATH ${ProjDirPath}/${CMAKE_BUILD_TYPE})
 
-# project name
-project(main)
-set(MCUX_SDK_PROJECT_NAME main.elf)
-
-# misc settings
-include(${ProjDirPath}/flags.cmake)
-set(CONFIG_USE_driver_uart_MK66F18 true)
-
-# main source code for this project
+# Source code to build the main executable target
 add_executable(${MCUX_SDK_PROJECT_NAME} 
    "${ProjDirPath}/../main.c"
    "${ProjDirPath}/../board/board.c"
@@ -35,17 +24,18 @@ add_executable(${MCUX_SDK_PROJECT_NAME}
    "${ProjDirPath}/../board/clock_config.h"
    )
 
-# where the source code for the modules is found
+# Where to find modules (.cmake files)
 set(CMAKE_MODULE_PATH
-   ${ProjDirPath}/../drivers
-   ${ProjDirPath}/../utilities
    ${ProjDirPath}/../CMSIS
    ${ProjDirPath}/../components/lists
    ${ProjDirPath}/../components/uart
    ${ProjDirPath}/../device
+   ${ProjDirPath}/../drivers
+   ${ProjDirPath}/../freertos
+   ${ProjDirPath}/../utilities
    )
 
-# include modules
+# Modules (.cmake files) to include
 include(CMSIS_Include_core_cm_MK66F18)
 include(component_lists_MK66F18)
 include(component_uart_adapter_MK66F18)
@@ -59,10 +49,12 @@ include(driver_gpio_MK66F18)
 include(driver_lpuart_MK66F18)
 include(driver_port_MK66F18)
 include(driver_smc_MK66F18)
+set(CONFIG_USE_driver_uart_MK66F18 true)
 include(driver_uart_MK66F18)
 include(utilities_misc_utilities_MK66F18)
 include(utility_assert_lite_MK66F18)
 include(utility_debug_console_lite_MK66F18)
+include(freertos)
 
 target_link_libraries(${MCUX_SDK_PROJECT_NAME} PRIVATE -Wl,--start-group)
 target_link_libraries(${MCUX_SDK_PROJECT_NAME} PRIVATE m)

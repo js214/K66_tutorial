@@ -56,6 +56,8 @@ files are:
 - `debug/main.elf`: The final binary file produced by the compilation process.
   This file is to be loaded on the microcontroller.
 
+- `freertos`: Files needed to compile the FreeRTOS kernel.
+
 - `build_log.txt`: Errors from running `mingw32-make` (redirected stderr).
 
 - `Makefile`: The output of CMake and input to `mingw32-make`.
@@ -87,3 +89,47 @@ following directories contain copies of files from the SDK distribution:
   functionality is already defined in `drivers`?
 
 - `device`: Obviously device-specific stuff, but no clue what it really does!
+
+### RTOS
+
+"FreeRTOS is a market-leading real-time operating system (RTOS) for
+microcontrollers and small microprocessors." [[FreeRTOS
+website](https://www.freertos.org/index.html)]
+
+All the files that implement the RTOS kernel are contained in `freertos`. The
+configuration of the kernel is done in `freertos/portable/FreeRTOSConfig.h`.
+
+## CMake notes
+
+To include `.c` and `.h` files into the project, CMake provides several
+similar-looking but subtly different commands:
+
+- `add_executable(name, source1, ...)`: Creates an executable target `name` from
+  the source files `source1, ...` The `name` must be unique in the project.
+
+- `add_library(name, source1, ...)`: Creates a library target `name` from the
+  source files. The `name` must be unique.
+
+- `target_include_directories(target, dir1, ...)`: When compiling the `target`
+  (as created by either `add_executable` or `add_library`), the include
+  directories `dir1, ...` will be used to source the `.h` files for the
+  `#include` directives.
+
+- `target_sources(target, source1, ...)`: Add source files `source1, ...` to the
+  `target` created in a previous invocation of `add_executable` or
+  `add_library`.
+
+- `include(X)`: Inserts an `X.cmake` file. CMake looks for this file either
+  under its built-in modules (in the CMake module directory), or in paths
+  specified in the `CMAKE_MODULE_PATH` variable.
+
+- `add_subdirectory(source_dir, binary_dir)`: Include the module located in
+  `source_dir`. The auto-generated build files will be placed in `binary_dir`.
+
+- `include_directories(dir1, ...)`: Add `dir1, ...` to the list of directories
+  the compiler uses to source the `.h` files for the `#include` directives.
+
+- [`target_link_libraries(target, lib1,
+  ...)`](https://cmake.org/cmake/help/latest/command/target_link_libraries.html):
+  "Specify libraries or flags to use when linking a given target and/or its
+  dependents."
