@@ -10,6 +10,8 @@ The projects are adapted from the SDK examples:
   exchanged data to UART
 - `4_I2C_LMK05028_read` reads out the registers on the LMK05028
 - `5_I2C_LMK05028_write` writes to all registers of LMK05028
+- `6_hello_world_simple` does the same as `2_hello_world`, but includes all the
+  SDK files needed for compilation.
 
 ## Setup
 
