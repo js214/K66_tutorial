@@ -14,6 +14,9 @@ The projects are adapted from the SDK examples:
   SDK files needed for compilation
 - `7_rtos` is a self-contained FreeRTOS example that starts one periodic task
 
+The CMake files, and the whole directory, is much cleaner starting from
+`7_rtos` onwards. This should be the minimal starting point for future projects.
+
 ## Setup
 
 Install software:

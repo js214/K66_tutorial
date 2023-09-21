@@ -1,8 +1,8 @@
 # Simple self-contained RTOS example
 
 This is a minimal example of using the FreeRTOS. The code in `main.c` starts a
-task that toggles the on/off state of an LED present on the FRDM-K66F eval
-board.
+task that prints a message to UART via the debug console, then toggles the
+on/off state of an LED present on the FRDM-K66F eval board.
 
 ## Code organization
 
@@ -28,9 +28,9 @@ These files are not edited manually, since Config Tools overwrites them.
 The directory `armgcc` contains Batch files, CMake files, debugging files. These
 are:
 
-- `build_debug.bat`: Running this batch script deletes old files, calls CMake to
-  generate make files, then calls make to compile the binary file that's ready
-  to be loaded to the microcontroller.
+- `build_debug.bat`: Running this batch script calls `clean.bat` to delete old
+  files, calls CMake to generate make files, then calls make to compile the
+  binary file that's ready to be loaded to the microcontroller.
 
 - `clean.bat`: Delete all auto-generated files (i.e., those that are created by
   `build_debug.bat`).
