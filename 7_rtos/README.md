@@ -1,8 +1,34 @@
 # Simple self-contained RTOS example
 
 This is a minimal example of using the FreeRTOS. The code in `main.c` starts a
-task that prints a message to UART via the debug console, then toggles the
-on/off state of an LED present on the FRDM-K66F eval board.
+task that prints a message to UART via the debug console, and a task that
+toggles the on/off state of an LED present on the [FRDM-K66F eval
+board](https://www.nxp.com/design/development-boards/freedom-development-boards/mcu-boards/freedom-development-platform-for-kinetis-k66-k65-and-k26-mcus:FRDM-K66F).
+
+## Getting started
+
+Install software:
+
+- [MinGW]( https://sourceforge.net/projects/mingw/) (install the `mingw32-base,
+  msys-base` packages)
+- [Arm GNU Toolchain](
+  https://developer.arm.com/Tools%20and%20Software/GNU%20Toolchain)
+  (`arm-gnu-toolchain-12.3.rel1-mingw-w64-i686-arm-none-eabi.exe`)
+- [CMake]( https://cmake.org/download/) (`cmake-3.27.4-windows-x86_64.msi`)
+- [MCUXpresso Config Tools](
+  https://www.nxp.com/design/software/development-software/mcuxpresso-software-and-tools-/mcuxpresso-config-tools-pins-clocks-and-peripherals:MCUXpresso-Config-Tools)
+
+Set environment variables:
+
+- `ARMGCC_DIR` : `C:\Program Files (x86)\Arm GNU Toolchain arm-none-eabi\12.3
+  rel1`
+- `PATH` : `C:\Program Files (x86)\Arm GNU Toolchain arm-none-eabi\12.3
+  rel1\bin;C:\Program Files\CMake\bin;C:\MinGW\bin`
+
+Start J-Link GDB Server V7.88m. From the command prompt, load code to dev board:
+
+    cd armgcc
+    arm-none-eabi-gdb.exe -q -x .\load.gdb
 
 ## Code organization
 
