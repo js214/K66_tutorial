@@ -1,9 +1,32 @@
 # Simple self-contained RTOS example
 
-This is a minimal example of using the FreeRTOS. The code in `main.c` starts a
-task that prints a message to UART via the debug console, and a task that
-toggles the on/off state of an LED present on the [FRDM-K66F eval
+This is a simple example of using the FreeRTOS on the [FRDM-K66F eval
 board](https://www.nxp.com/design/development-boards/freedom-development-boards/mcu-boards/freedom-development-platform-for-kinetis-k66-k65-and-k26-mcus:FRDM-K66F).
+It demonstrates some of the core functionality of the FreeRTOS operating system.
+For more information, check out the sections in the FreeRTOS handbook cited
+below [MtFRTK].
+
+The code in `main.c` creates the following tasks before starting the FreeRTOS
+scheduler by calling `vTaskStartScheduler()`:
+
+- `vTask1()` prints a message to UART via the debug console, then deletes
+  itself.  Normally FreeRTOS tasks run a forever loop, but if they do need to
+  exit, they must call `vTaskDelete(NULL)`; "they must not contain a ‘return’
+  statement and must not be allowed to execute past the end of the function."
+  [MtFRTK sect 3.2]
+
+- `vTask2()`, in its `while (true)` loop, toggles the on/off state of the blue
+  LED, then sleeps (enters the Blocked state) for a second using the FreeRTOS
+  `vTaskDelay()` function. It never exits the loop. [MtFRTK sect 3.7]
+
+- `prvTimerCallback1()` uses an auto-reload software timer [MtFRTK sect 5.5] to
+  blink the red LED.  This is not a task, but rather a callback function to the
+  timer, although in this case it behaves similarly as `vTask2()`.
+
+Code should normally check if the tasks and timers were created successfully
+using the values returned from `xTaskCreate()` and `xTimerCreate()`, and if the
+timers were successfully started using the return value from `xTimerStart`. This
+example omits this to make the code easier to read.
 
 ## Getting started
 
@@ -169,3 +192,9 @@ similar-looking but subtly different commands:
   ...)`](https://cmake.org/cmake/help/latest/command/target_link_libraries.html):
   "Specify libraries or flags to use when linking a given target and/or its
   dependents."
+
+## References
+
+[MtFRTK] Richard Barry: *Mastering the FreeRTOS Real Time Kernel - a Hands On
+Tutorial Guide.* Available from
+<https://freertos.org/Documentation/RTOS_book.html> and accessed on 9/22/2023.

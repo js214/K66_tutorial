@@ -54,6 +54,19 @@ void BOARD_InitBootPins(void);
 #define BOARD_TRACE_SWO_PIN_MASK (1U << 2U)      /*!<@brief PORT pin mask */
                                                  /* @} */
 
+/*! @name PORTA11 (coord L9), LEDRGB_BLUE
+  @{ */
+
+/* Symbols to be used with GPIO driver */
+#define BOARD_LED_BLUE_GPIO GPIOA                /*!<@brief GPIO peripheral base pointer */
+#define BOARD_LED_BLUE_GPIO_PIN_MASK (1U << 11U) /*!<@brief GPIO pin mask */
+
+/* Symbols to be used with PORT driver */
+#define BOARD_LED_BLUE_PORT PORTA                /*!<@brief PORT peripheral base pointer */
+#define BOARD_LED_BLUE_PIN 11U                   /*!<@brief PORT pin number */
+#define BOARD_LED_BLUE_PIN_MASK (1U << 11U)      /*!<@brief PORT pin mask */
+                                                 /* @} */
+
 /*!
  * @brief Configures pin routing and optionally pin electrical features.
  *

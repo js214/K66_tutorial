@@ -67,6 +67,7 @@
                      </pin_features>
                   </pin>
                   <pin peripheral="GPIOA" signal="GPIO, 11" pin_num="L9" pin_signal="PTA11/LLWU_P23/FTM2_CH1/MII0_RXCLK/I2C2_SDA/FTM2_QD_PHB/TPM2_CH1"/>
+                  <pin peripheral="GPIOC" signal="GPIO, 9" pin_num="D7" pin_signal="ADC1_SE5b/CMP0_IN3/PTC9/FTM3_CH5/I2S0_RX_BCLK/FB_AD6/SDRAM_A14/FTM2_FLT0"/>
                </pins>
             </function>
          </functions_list>

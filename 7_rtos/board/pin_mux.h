@@ -67,6 +67,19 @@ void BOARD_InitBootPins(void);
 #define BOARD_LED_BLUE_PIN_MASK (1U << 11U)      /*!<@brief PORT pin mask */
                                                  /* @} */
 
+/*! @name PORTC9 (coord D7), LEDRGB_RED
+  @{ */
+
+/* Symbols to be used with GPIO driver */
+#define BOARD_LED_RED_GPIO GPIOC               /*!<@brief GPIO peripheral base pointer */
+#define BOARD_LED_RED_GPIO_PIN_MASK (1U << 9U) /*!<@brief GPIO pin mask */
+
+/* Symbols to be used with PORT driver */
+#define BOARD_LED_RED_PORT PORTC               /*!<@brief PORT peripheral base pointer */
+#define BOARD_LED_RED_PIN 9U                   /*!<@brief PORT pin number */
+#define BOARD_LED_RED_PIN_MASK (1U << 9U)      /*!<@brief PORT pin mask */
+                                               /* @} */
+
 /*!
  * @brief Configures pin routing and optionally pin electrical features.
  *
