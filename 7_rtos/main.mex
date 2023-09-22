@@ -310,7 +310,24 @@
          </dcdx_profile>
          <dcdx_configurations/>
       </dcdx>
-      <periphs name="Peripherals" version="13.0" enabled="true" update_project_code="false">
+      <periphs name="Peripherals" version="13.0" enabled="true" update_project_code="true">
+         <dependencies>
+            <dependency resourceType="SWComponent" resourceId="platform.drivers.uart" description="UART Driver is not found in the toolchain/IDE project. The project will not compile!" problem_level="2" source="Peripherals">
+               <feature name="enabled" evaluation="equal">
+                  <data type="Boolean">true</data>
+               </feature>
+            </dependency>
+            <dependency resourceType="SWComponent" resourceId="platform.drivers.uart" description="An unsupported version of the UART Driver in the toolchain/IDE project. Required: ${required_value}, actual: ${actual_value}. The project might not compile correctly." problem_level="1" source="Peripherals">
+               <feature name="version" evaluation="equivalent">
+                  <data type="Version">2.5.1</data>
+               </feature>
+            </dependency>
+            <dependency resourceType="Tool" resourceId="Clocks" description="The Clocks tool is required by the Peripherals tool, but it is disabled." problem_level="2" source="Peripherals">
+               <feature name="enabled" evaluation="equal">
+                  <data>true</data>
+               </feature>
+            </dependency>
+         </dependencies>
          <generated_project_files>
             <file path="board/peripherals.c" update_enabled="true"/>
             <file path="board/peripherals.h" update_enabled="true"/>
@@ -322,12 +339,157 @@
             <functional_group name="BOARD_InitPeripherals" uuid="7faff770-f02f-4c7c-a3e5-1c5280dffa6a" called_from_default_init="true" id_prefix="" core="core0">
                <description></description>
                <options/>
-               <dependencies/>
+               <dependencies>
+                  <dependency resourceType="ClockOutput" resourceId="System_clock" description="System clock is inactive." problem_level="1" source="Peripherals:BOARD_InitPeripherals">
+                     <feature name="frequency" evaluation="greaterThan">
+                        <data type="Frequency" unit="Hz">0</data>
+                     </feature>
+                  </dependency>
+                  <dependency resourceType="PeripheralUnifiedSignal" resourceId="UART0.uart_tx" description="Signal TX is not routed." problem_level="1" source="Peripherals:BOARD_InitPeripherals">
+                     <feature name="routed" evaluation="equal">
+                        <data type="Boolean">true</data>
+                     </feature>
+                  </dependency>
+                  <dependency resourceType="PeripheralUnifiedSignal" resourceId="UART0.uart_rx" description="Signal RX is not routed." problem_level="1" source="Peripherals:BOARD_InitPeripherals">
+                     <feature name="routed" evaluation="equal">
+                        <data type="Boolean">true</data>
+                     </feature>
+                  </dependency>
+               </dependencies>
                <instances>
                   <instance name="NVIC" uuid="815babd8-200d-4710-94cd-f36ef3b8f27f" type="nvic" type_id="nvic_57b5eef3774cc60acaede6f5b8bddc67" mode="general" peripheral="NVIC" enabled="true" comment="" custom_name_enabled="false" editing_lock="false">
                      <config_set name="nvic">
                         <array name="interrupt_table"/>
                         <array name="interrupts"/>
+                     </config_set>
+                  </instance>
+                  <instance name="I2S0" uuid="76ed41fb-76ee-4bf9-a648-216ca03c883d" type="sai" type_id="sai_c081eb82421377f2dc8227b104292171" mode="interrupts" peripheral="I2S0" enabled="false" comment="" custom_name_enabled="false" editing_lock="false">
+                     <config_set name="fsl_sai">
+                        <struct name="mclk_config">
+                           <setting name="masterClockSource" value="kSAI_MclkSourceSysclk"/>
+                           <setting name="masterClockSourceFreq" value="ClocksTool_DefaultInit"/>
+                           <setting name="masterClockFrequency" value="6.144 MHz"/>
+                           <setting name="init_mclk_config" value="true"/>
+                        </struct>
+                        <struct name="sai_master_clock"/>
+                        <setting name="usage" value="playback"/>
+                        <array name="signal_config">
+                           <struct name="0">
+                              <setting name="sourceTx" value="Tx"/>
+                           </struct>
+                           <struct name="1">
+                              <setting name="sourceTx" value="Tx"/>
+                           </struct>
+                        </array>
+                        <struct name="syncSwapI"/>
+                        <struct name="bclkTxSetting"/>
+                        <struct name="syncTxSetting"/>
+                        <struct name="whole">
+                           <struct name="tx_group">
+                              <struct name="sai_transceiver">
+                                 <struct name="bitClock">
+                                    <setting name="modeM" value="master"/>
+                                    <setting name="bitClockSource" value="kSAI_BclkSourceMclkDiv"/>
+                                    <setting name="bclkPolarityM" value="kSAI_PolarityActiveLow"/>
+                                    <setting name="bclkInputDelayM" value="false"/>
+                                 </struct>
+                                 <struct name="frameSync">
+                                    <setting name="modeM" value="master"/>
+                                    <setting name="frameSyncWidthM" value="16"/>
+                                    <setting name="frameSyncPolarityM" value="kSAI_PolarityActiveLow"/>
+                                    <setting name="frameSyncEarlyM" value="true"/>
+                                 </struct>
+                                 <setting name="sampleRate_Hz" value="kSAI_SampleRate16KHz"/>
+                                 <set name="channelMask">
+                                    <selected>
+                                       <id>kSAI_Channel0Mask</id>
+                                    </selected>
+                                 </set>
+                                 <struct name="serialData">
+                                    <setting name="differentFirstWord" value="false"/>
+                                    <setting name="sameDataWordLengthM" value="kSAI_WordWidth16bits"/>
+                                    <setting name="dataOrder" value="kSAI_DataMSB"/>
+                                    <setting name="dataFirstBitShiftedM" value="16"/>
+                                    <setting name="dataWordNumM" value="2"/>
+                                    <struct name="dataMasked_config">
+                                       <array name="dataMasked_L">
+                                          <setting name="0" value="false"/>
+                                          <setting name="1" value="false"/>
+                                          <setting name="2" value="false"/>
+                                          <setting name="3" value="false"/>
+                                          <setting name="4" value="false"/>
+                                          <setting name="5" value="false"/>
+                                          <setting name="6" value="false"/>
+                                          <setting name="7" value="false"/>
+                                          <setting name="8" value="false"/>
+                                          <setting name="9" value="false"/>
+                                          <setting name="10" value="false"/>
+                                          <setting name="11" value="false"/>
+                                          <setting name="12" value="false"/>
+                                          <setting name="13" value="false"/>
+                                          <setting name="14" value="false"/>
+                                          <setting name="15" value="false"/>
+                                       </array>
+                                       <array name="dataMasked_H">
+                                          <setting name="0" value="false"/>
+                                          <setting name="1" value="false"/>
+                                          <setting name="2" value="false"/>
+                                          <setting name="3" value="false"/>
+                                          <setting name="4" value="false"/>
+                                          <setting name="5" value="false"/>
+                                          <setting name="6" value="false"/>
+                                          <setting name="7" value="false"/>
+                                          <setting name="8" value="false"/>
+                                          <setting name="9" value="false"/>
+                                          <setting name="10" value="false"/>
+                                          <setting name="11" value="false"/>
+                                          <setting name="12" value="false"/>
+                                          <setting name="13" value="false"/>
+                                          <setting name="14" value="false"/>
+                                          <setting name="15" value="false"/>
+                                       </array>
+                                    </struct>
+                                 </struct>
+                                 <struct name="fifo">
+                                    <setting name="fifoWatermarkM" value="16"/>
+                                    <setting name="fifoCombine" value="kSAI_FifoCombineDisabled"/>
+                                    <setting name="fifoPacking" value="kSAI_FifoPackingDisabled"/>
+                                    <setting name="fifoContinueOneError" value="false"/>
+                                 </struct>
+                              </struct>
+                              <set name="interrupt_sel">
+                                 <selected/>
+                              </set>
+                              <struct name="interrupt">
+                                 <setting name="IRQn" value="I2S0_Tx_IRQn"/>
+                                 <setting name="enable_interrrupt" value="enabled"/>
+                                 <setting name="enable_priority" value="false"/>
+                                 <setting name="priority" value="0"/>
+                                 <setting name="enable_custom_name" value="false"/>
+                              </struct>
+                           </struct>
+                        </struct>
+                     </config_set>
+                  </instance>
+                  <instance name="UART0" uuid="1062e416-e3ef-4d82-9625-c6a34b02cb29" type="uart" type_id="uart_9b45c456566d03f79ecfe90751c10bb4" mode="polling" peripheral="UART0" enabled="true" comment="" custom_name_enabled="false" editing_lock="false">
+                     <config_set name="uartConfig_t" quick_selection="QuickSelection1">
+                        <struct name="uartConfig">
+                           <setting name="clockSource" value="BusInterfaceClock"/>
+                           <setting name="clockSourceFreq" value="GetFreq"/>
+                           <setting name="baudRate_Bps" value="115200"/>
+                           <setting name="parityMode" value="kUART_ParityDisabled"/>
+                           <setting name="dataBitsCount" value="kUART_EightDataBits"/>
+                           <setting name="stopBitCount" value="kUART_OneStopBit"/>
+                           <setting name="enableMatchAddress1" value="false"/>
+                           <setting name="matchAddress1" value="0"/>
+                           <setting name="enableMatchAddress2" value="false"/>
+                           <setting name="matchAddress2" value="0"/>
+                           <setting name="txFifoWatermark" value="0"/>
+                           <setting name="rxFifoWatermark" value="1"/>
+                           <setting name="idleType" value="kUART_IdleTypeStartBit"/>
+                           <setting name="enableTx" value="true"/>
+                           <setting name="enableRx" value="true"/>
+                        </struct>
                      </config_set>
                   </instance>
                </instances>

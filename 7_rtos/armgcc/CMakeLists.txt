@@ -22,6 +22,8 @@ add_executable(${MCUX_SDK_PROJECT_NAME}
    "${ProjDirPath}/../board/pin_mux.h"
    "${ProjDirPath}/../board/clock_config.c"
    "${ProjDirPath}/../board/clock_config.h"
+   "${ProjDirPath}/../board/peripherals.c"
+   "${ProjDirPath}/../board/peripherals.h"
    )
 
 # Where to find modules (.cmake files)

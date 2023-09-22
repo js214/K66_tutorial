@@ -11,6 +11,7 @@
 #include "board/pin_mux.h"
 #include "board/clock_config.h"
 #include "board/board.h"
+#include "board/peripherals.h"
 
 /**
  * Calls functions to setup the microcontroller.
