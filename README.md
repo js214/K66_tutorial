@@ -10,9 +10,9 @@ The projects are adapted from the SDK examples:
   exchanged data to UART
 - `4_I2C_LMK05028_read` reads out the registers on the LMK05028
 - `5_I2C_LMK05028_write` writes to all registers of LMK05028
-- `6_hello_world_simple` does the same as `2_hello_world`, but includes all the
-  SDK files needed for compilation
-- `7_rtos` is a self-contained FreeRTOS example that starts one periodic task
+- `6_hello_world_simple` does the same as `2_hello_world`, but includes most of
+  the SDK files needed for compilation
+- `7_rtos` is a self-contained FreeRTOS example
 
 The CMake files, and the whole directory, is much cleaner starting from
 `7_rtos` onwards. This should be the minimal starting point for future projects.

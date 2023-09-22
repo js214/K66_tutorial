@@ -30,6 +30,12 @@ example omits this to make the code easier to read.
 
 ## Getting started
 
+In this example I use the ARM GCC toolchain to build the project, which requires
+the collection of software described below. If using different tools, such as
+the MCUXpresso IDE, the process is different. Check out the eval board [Getting
+Started](https://www.nxp.com/document/guide/get-started-with-the-frdm-k66f:NGS-FRDM-K66F?section=build-run)
+guide for more details.
+
 Install software:
 
 - [MinGW]( https://sourceforge.net/projects/mingw/) (install the `mingw32-base,
@@ -48,6 +54,8 @@ Set environment variables:
   rel1`
 - `PATH` : `C:\Program Files (x86)\Arm GNU Toolchain arm-none-eabi\12.3
   rel1\bin;C:\Program Files\CMake\bin;C:\MinGW\bin`
+
+Compile the code using by running [`build_debug.bat`](armgcc/build_debug.bat).
 
 Start J-Link GDB Server V7.88m. From the command prompt, load code to dev board:
 
@@ -132,9 +140,9 @@ following directories contain copies of files from the SDK distribution:
   enables the drivers to be included in the compilation of the main project
   using `include` statements in the `CMakeLists.txt` file.
 
-- [`utilities`](utilities): The debug console defines versions of `printf` and
-  `scanf` that print to UART. The `fsl_assert.c` defines assert functionality.
-  Misc utilities include `fsl_sbrk.c`.
+- [`utilities`](utilities): The debug console [SDKref ch 35] defines versions of
+  `printf` and `scanf` that print to UART. The `fsl_assert.c` defines assert
+  functionality.  Misc utilities include `fsl_sbrk.c`.
 
 - [`CMSIS`](CMSIS): "CMSIS provides interfaces to processor and peripherals,
   real-time operating systems, and middleware components" according to the [ARM
@@ -155,8 +163,20 @@ microcontrollers and small microprocessors." [[FreeRTOS
 website](https://www.freertos.org/index.html)]
 
 All the files that implement the RTOS kernel are contained in
-[`freertos`](freertos). The configuration of the kernel is done in
-[`freertos/portable/FreeRTOSConfig.h`](`freertos/portable/FreeRTOSConfig.h`).
+[`freertos`](freertos). So as to compile the kernel together with the rest of
+the project, it is included as a CMake module/library in
+[`CMakeLists.txt`](armgcc/CMakeLists.txt) as follows:
+
+- Its location is added to `CMAKE_MODULE_PATH`
+- Its `.cmake` file is added to the project with a `include()` directive
+- Its executable is linked with the main executable using the
+  `target_link_libraries()` directive
+
+The configuration of the kernel is done in
+[`freertos/portable/FreeRTOSConfig.h`](freertos/portable/FreeRTOSConfig.h). This
+file is application specific and should perhaps be stored together with other
+app-specific code. (But why not keep all FreeRTOS stuff together in the same
+directory!)
 
 ## CMake notes
 
@@ -208,3 +228,6 @@ similar-looking but subtly different commands:
 [MtFRTK] Richard Barry: *Mastering the FreeRTOS Real Time Kernel - a Hands On
 Tutorial Guide.* Available from
 <https://freertos.org/Documentation/RTOS_book.html> and accessed on 9/22/2023.
+
+[SDKref] NXP Semiconductors: *MCUXpresso SDK API Reference Manual.* Rev. 0, Jun
+2019, Document Number: MCUXSDKAPIRM.
