@@ -27,7 +27,6 @@ add_executable(${MCUX_SDK_PROJECT_NAME}
 # Where to find modules (.cmake files)
 set(CMAKE_MODULE_PATH
    ${ProjDirPath}/../CMSIS
-   ${ProjDirPath}/../components/lists
    ${ProjDirPath}/../components/uart
    ${ProjDirPath}/../device
    ${ProjDirPath}/../drivers
@@ -37,8 +36,6 @@ set(CMAKE_MODULE_PATH
 
 # Modules (.cmake files) to include
 include(CMSIS_Include_core_cm_MK66F18)
-include(component_lists_MK66F18)
-include(component_uart_adapter_MK66F18)
 include(device_MK66F18_CMSIS_MK66F18)
 include(device_MK66F18_startup_MK66F18)
 include(device_MK66F18_system_MK66F18)

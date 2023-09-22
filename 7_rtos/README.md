@@ -6,8 +6,8 @@ It demonstrates some of the core functionality of the FreeRTOS operating system.
 For more information, check out the sections in the FreeRTOS handbook cited
 below [MtFRTK].
 
-The code in `main.c` creates the following tasks before starting the FreeRTOS
-scheduler by calling `vTaskStartScheduler()`:
+The code in [`main.c`](main.c) creates the following tasks before starting the
+FreeRTOS scheduler by calling `vTaskStartScheduler()`:
 
 - `vTask1()` prints a message to UART via the debug console, then deletes
   itself.  Normally FreeRTOS tasks run a forever loop, but if they do need to
@@ -40,6 +40,7 @@ Install software:
 - [CMake]( https://cmake.org/download/) (`cmake-3.27.4-windows-x86_64.msi`)
 - [MCUXpresso Config Tools](
   https://www.nxp.com/design/software/development-software/mcuxpresso-software-and-tools-/mcuxpresso-config-tools-pins-clocks-and-peripherals:MCUXpresso-Config-Tools)
+- [Segger J-Link](https://www.segger.com/downloads/jlink/)
 
 Set environment variables:
 
@@ -132,12 +133,15 @@ following directories contain copies of files from the SDK distribution:
 
 - `CMSIS`: "CMSIS provides interfaces to processor and peripherals, real-time
   operating systems, and middleware components" according to the [ARM
-  website](https://www.keil.arm.com/cmsis). Not sure what it actually does.
+  website](https://www.keil.arm.com/cmsis). Not sure what it actually does;
+  something to do with defining a uniform low-level interface to all ARM chips.
 
-- `components`: UART, list. Not sure what this is for exactly. I thought UART
-  functionality is already defined in `drivers`?
+- `components/uart`: Not sure what this is for exactly, but it is required for
+  the debug console. One would think that UART functionality is already defined
+  in `drivers`?
 
-- `device`: Obviously device-specific stuff, but no clue what it really does!
+- `device`: Obviously device-specific stuff, giving registers (for interrupts,
+  etc.) human-readable names, and other very low-level definitions.
 
 ### RTOS
 
