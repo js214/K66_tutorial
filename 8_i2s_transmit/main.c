@@ -9,7 +9,6 @@
 #include "board/peripherals.h"
 
 // global variables
-sai_master_clock_t mclkConfig;
 sai_handle_t txHandle = {0};
 static volatile bool isFinished = false;
 
@@ -20,6 +19,7 @@ void setup_MCU(void)
 {
    BOARD_InitBootPins();
    BOARD_InitBootClocks();
+   //BOARD_InitBootPeripherals();
    BOARD_InitDebugConsole();
 }
 
@@ -38,24 +38,19 @@ int main(void)
    SAI_Init(I2S0_PERIPHERAL);
    SAI_TransferTxCreateHandle(I2S0_PERIPHERAL, &txHandle, callback, NULL);
 
-   /* I2S mode configurations */
-   SAI_GetClassicI2SConfig(&I2S0_Tx_config, I2S0_TX_WORD_WIDTH, kSAI_Stereo, kSAI_Channel0Mask);
-   I2S0_Tx_config.syncMode    = kSAI_ModeAsync;
-   I2S0_Tx_config.masterSlave = kSAI_Master;
-   SAI_TransferTxSetConfig(I2S0_PERIPHERAL, &txHandle, &I2S0_Tx_config);
-
-   /* set bit clock divider */
-   SAI_TxSetBitClockRate(I2S0_PERIPHERAL, I2S0_TX_BCLK_SOURCE_CLOCK_HZ,
-         I2S0_TX_SAMPLE_RATE, I2S0_TX_WORD_WIDTH, kSAI_Channel0Mask);
+//   /* I2S mode configurations */
+//   SAI_TransferTxSetConfig(I2S0_PERIPHERAL, &txHandle, &I2S0_Tx_config);
 
    /*  xfer structure */
    sai_transfer_t xfer;
-   xfer.data     = (uint8_t *)music;
-   xfer.dataSize = MUSIC_LEN;
+   uint8_t data[] = {1, 2, 3, 4, 5};
+   xfer.data     = data;
+   xfer.dataSize = 6;
    SAI_TransferSendNonBlocking(I2S0_PERIPHERAL, &txHandle, &xfer);
+   PRINTF("test ");
 
-   /* Wait until finished */
-   while (isFinished != true);
+//   /* Wait until finished */
+//   while (isFinished != true);
 
    while (true); // never reached
 }
