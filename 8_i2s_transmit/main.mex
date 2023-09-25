@@ -85,6 +85,8 @@
                         <pin_feature name="pull_enable" value="enable"/>
                      </pin_features>
                   </pin>
+                  <pin peripheral="I2S0" signal="RX_FS" pin_num="B8" pin_signal="CMP0_IN1/PTC7/SPI0_SIN/USB0_SOF_OUT/I2S0_RX_FS/FB_AD8/SDRAM_A16"/>
+                  <pin peripheral="I2S0" signal="RX_BCLK" pin_num="D7" pin_signal="ADC1_SE5b/CMP0_IN3/PTC9/FTM3_CH5/I2S0_RX_BCLK/FB_AD6/SDRAM_A14/FTM2_FLT0"/>
                </pins>
             </function>
          </functions_list>
@@ -452,7 +454,7 @@
                         <struct name="mclk_config">
                            <setting name="masterClockSource" value="kSAI_MclkSourceSysclk"/>
                            <setting name="masterClockSourceFreq" value="ClocksTool_DefaultInit"/>
-                           <setting name="masterClockFrequency" value="6.144 MHz"/>
+                           <setting name="masterClockFrequency" value="12.288 MHz"/>
                            <setting name="init_mclk_config" value="true"/>
                         </struct>
                         <struct name="sai_master_clock"/>
@@ -535,7 +537,7 @@
                                     </struct>
                                  </struct>
                                  <struct name="fifo">
-                                    <setting name="fifoWatermarkM" value="16"/>
+                                    <setting name="fifoWatermarkM" value="0"/>
                                     <setting name="fifoCombine" value="kSAI_FifoCombineDisabled"/>
                                     <setting name="fifoPacking" value="kSAI_FifoPackingDisabled"/>
                                     <setting name="fifoContinueOneError" value="false"/>

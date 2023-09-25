@@ -99,6 +99,24 @@ void BOARD_InitBootPins(void);
 #define BOARD_I2C1_SDA_PIN_MASK (1U << 11U)      /*!<@brief PORT pin mask */
                                                  /* @} */
 
+/*! @name PORTC7 (coord B8), J1[11]/USB0_SOF_OUT/I2S0_RX_FS/FB_AD8
+  @{ */
+
+/* Symbols to be used with PORT driver */
+#define BOARD_USB_SOF_OUT_PORT PORTC               /*!<@brief PORT peripheral base pointer */
+#define BOARD_USB_SOF_OUT_PIN 7U                   /*!<@brief PORT pin number */
+#define BOARD_USB_SOF_OUT_PIN_MASK (1U << 7U)      /*!<@brief PORT pin mask */
+                                                   /* @} */
+
+/*! @name PORTC9 (coord D7), LEDRGB_RED
+  @{ */
+
+/* Symbols to be used with PORT driver */
+#define BOARD_LED_RED_PORT PORTC               /*!<@brief PORT peripheral base pointer */
+#define BOARD_LED_RED_PIN 9U                   /*!<@brief PORT pin number */
+#define BOARD_LED_RED_PIN_MASK (1U << 9U)      /*!<@brief PORT pin mask */
+                                               /* @} */
+
 /*!
  * @brief Configures pin routing and optionally pin electrical features.
  *
@@ -117,4 +135,3 @@ void BOARD_InitPins(void);
 /***********************************************************************************************************************
  * EOF
  **********************************************************************************************************************/
-

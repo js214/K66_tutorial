@@ -30,11 +30,11 @@ extern "C" {
 /* I2S0 interrupt handler identifier. */
 #define I2S0_SERIAL_TX_IRQHANDLER I2S0_Tx_IRQHandler
 /* Master clock source frequency used for calculating the master clock divider, not available on all devices. */
-#define I2S0_MCLK_SOURCE_CLOCK_HZ 120000000U
+#define I2S0_MCLK_SOURCE_CLOCK_HZ 120000000UL
 /* Master clock value set by the user to the Master clock frequency item. */
-#define I2S0_USER_MCLK_HZ 12288000U
+#define I2S0_USER_MCLK_HZ 12288000UL
 /* Bit clock source frequency used for calculating the bit clock divider in the TxSetBitClockRate function. */
-#define I2S0_TX_BCLK_SOURCE_CLOCK_HZ 12288000U
+#define I2S0_TX_BCLK_SOURCE_CLOCK_HZ 12288000UL
 /* Sample rate used for calculating the bit clock divider in the TxSetBitClockRate function. */
 #define I2S0_TX_SAMPLE_RATE 16000UL
 /* Word width used for calculating the bit clock divider in the TxSetBitClockRate function. */

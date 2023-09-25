@@ -15,40 +15,6 @@
 // project include files
 #include "music.h"
 
-/*******************************************************************************
- * Definitions
- ******************************************************************************/
-/* SAI and I2C instance and clock */
-#define DEMO_SAI_CLKSRC       kCLOCK_CoreSysClk
-#define DEMO_SAI_CLK_FREQ     CLOCK_GetFreq(kCLOCK_CoreSysClk)
-#define DEMO_SAI_IRQ          I2S0_Tx_IRQn
-#define DEMO_SAITxIRQHandler  I2S0_Tx_IRQHandler
-#define DEMO_SAI_TX_SYNC_MODE kSAI_ModeAsync
-#define DEMO_SAI_RX_SYNC_MODE kSAI_ModeSync
-#define DEMO_SAI_MCLK_OUTPUT  true
-#define DEMO_SAI_MASTER_SLAVE kSAI_Master
-
-
-#define DEMO_I2C              I2C1
-#define DEMO_I2C_CLKSRC       kCLOCK_BusClk
-#define DEMO_I2C_CLK_FREQ     CLOCK_GetFreq(kCLOCK_BusClk)
-#define I2C_RELEASE_SDA_PORT  PORTC
-#define I2C_RELEASE_SCL_PORT  PORTC
-#define I2C_RELEASE_SDA_GPIO  GPIOC
-#define I2C_RELEASE_SDA_PIN   11U
-#define I2C_RELEASE_SCL_GPIO  GPIOC
-#define I2C_RELEASE_SCL_PIN   10U
-#define I2C_RELEASE_BUS_COUNT 100U
-
-#define BOARD_MASTER_CLOCK_CONFIG        BOARD_MasterClockConfig
-#define DEMO_CODEC_DA7212
-
-/*******************************************************************************
- * Prototypes
- ******************************************************************************/
-
-void BOARD_I2C_ReleaseBus(void);
-void BOARD_MasterClockConfig(void);
 
 /*******************************************************************************
  * Variables
@@ -65,7 +31,6 @@ codec_config_t boardCodecConfig = {.codecDevType = kCODEC_DA7212, .codecDevConfi
 
 sai_master_clock_t mclkConfig;
 
-sai_handle_t txHandle           = {0};
 static volatile bool isFinished = false;
 extern codec_config_t boardCodecConfig;
 codec_handle_t codecHandle;
@@ -73,13 +38,6 @@ codec_handle_t codecHandle;
 /*******************************************************************************
  * Code
  ******************************************************************************/
-
-void BOARD_MasterClockConfig(void)
-{
-   mclkConfig.mclkOutputEnable = true, mclkConfig.mclkHz = I2S0_TX_BCLK_SOURCE_CLOCK_HZ;
-   mclkConfig.mclkSourceClkHz = DEMO_SAI_CLK_FREQ;
-   SAI_SetMasterClockConfig(I2S0_PERIPHERAL, &mclkConfig);
-}
 
 static void callback(I2S_Type *base, sai_handle_t *handle, status_t status, void *userData)
 {
@@ -107,15 +65,14 @@ int main(void)
    PRINTF("SAI example started!\n\r");
 
    /* SAI init */
+   sai_handle_t txHandle           = {0};
    SAI_TransferTxCreateHandle(I2S0_PERIPHERAL, &txHandle, callback, NULL);
 
    /* I2S mode configurations */
-   //SAI_TxSetConfig(I2S0_PERIPHERAL, &I2S0_Tx_config);
    SAI_TransferTxSetConfig(I2S0_PERIPHERAL, &txHandle, &I2S0_Tx_config);
 
    /* set bit clock divider */
-   SAI_TxSetBitClockRate(I2S0_PERIPHERAL, I2S0_TX_BCLK_SOURCE_CLOCK_HZ, I2S0_TX_SAMPLE_RATE, I2S0_TX_WORD_WIDTH, 
-         I2S0_TX_WORDS_PER_FRAME);
+   SAI_TxSetBitClockRate(I2S0_PERIPHERAL, I2S0_TX_BCLK_SOURCE_CLOCK_HZ, I2S0_TX_SAMPLE_RATE, I2S0_TX_WORD_WIDTH, I2S0_TX_WORDS_PER_FRAME);
 
    if (CODEC_Init(&codecHandle, &boardCodecConfig) != kStatus_Success)
       assert(false);
@@ -132,10 +89,9 @@ int main(void)
    sai_transfer_t xfer;
    xfer.data     = (uint8_t *)temp;
    xfer.dataSize = MUSIC_LEN;
-   SAI_TransferSendNonBlocking(I2S0_PERIPHERAL, &txHandle, &xfer);
-   /* Wait until finished */
-   while (isFinished != true);
 
-   PRINTF("\n\r SAI example finis!\n\r ");
-   while (true);
+   while (true) {
+      SAI_TransferSendNonBlocking(I2S0_PERIPHERAL, &txHandle, &xfer);
+      while (isFinished != true);
+   }
 }

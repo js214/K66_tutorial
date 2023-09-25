@@ -96,7 +96,7 @@ instance:
     - mclk_config:
       - masterClockSource: 'kSAI_MclkSourceSysclk'
       - masterClockSourceFreq: 'ClocksTool_DefaultInit'
-      - masterClockFrequency: '6.144 MHz'
+      - masterClockFrequency: '12.288 MHz'
       - init_mclk_config: 'true'
     - sai_master_clock: []
     - usage: 'playback'
@@ -112,7 +112,8 @@ instance:
       - tx_group:
         - sai_transceiver:
           - bitClock:
-            - modeM: 'master' - bitClockSource: 'kSAI_BclkSourceMclkDiv'
+            - modeM: 'master'
+            - bitClockSource: 'kSAI_BclkSourceMclkDiv'
             - bclkPolarityM: 'kSAI_PolarityActiveLow'
             - bclkInputDelayM: 'false'
           - frameSync:
@@ -164,7 +165,7 @@ instance:
                 - 14: 'false'
                 - 15: 'false'
           - fifo:
-            - fifoWatermarkM: '16'
+            - fifoWatermarkM: '0'
             - fifoCombine: 'kSAI_FifoCombineDisabled'
             - fifoPacking: 'kSAI_FifoPackingDisabled'
             - fifoContinueOneError: 'false'
@@ -205,6 +206,12 @@ sai_transceiver_t I2S0_Tx_config = {
     .dataWordNum = 2U,
     .dataMaskedWord = 0x0U
   },
+  .fifo = {
+    .fifoWatermark = 0U,
+    .fifoCombine = kSAI_FifoCombineDisabled,
+    .fifoPacking = kSAI_FifoPackingDisabled,
+    .fifoContinueOneError = false
+  }
 };
 sai_master_clock_t I2S0_MCLK_config = {
   .mclkOutputEnable = true,
@@ -216,18 +223,14 @@ sai_master_clock_t I2S0_MCLK_config = {
 static void I2S0_init(void) {
   /* Initialize SAI clock gate */
   SAI_Init(I2S0_PERIPHERAL);
-
   /* Configures SAI Tx sub-module functionality */
-  //SAI_TxSetConfig(I2S0_PERIPHERAL, &I2S0_Tx_config);
-
+  SAI_TxSetConfig(I2S0_PERIPHERAL, &I2S0_Tx_config);
   /* Set up SAI Tx bitclock rate by calculation of divider. */
   SAI_TxSetBitClockRate(I2S0_PERIPHERAL, I2S0_TX_BCLK_SOURCE_CLOCK_HZ, I2S0_TX_SAMPLE_RATE, I2S0_TX_WORD_WIDTH, I2S0_TX_WORDS_PER_FRAME);
-
   /* Initialize SAI master clock */
   SAI_SetMasterClockConfig(I2S0_PERIPHERAL, &I2S0_MCLK_config);
-
   /* Enable interrupt I2S0_Tx_IRQn request in the NVIC. */
-  //EnableIRQ(I2S0_SERIAL_TX_IRQN);
+  EnableIRQ(I2S0_SERIAL_TX_IRQN);
 }
 
 /***********************************************************************************************************************

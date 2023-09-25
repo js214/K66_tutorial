@@ -48,6 +48,8 @@ BOARD_InitPins:
     pull_enable: enable}
   - {pin_num: B7, peripheral: I2C1, signal: SDA, pin_signal: ADC1_SE7b/PTC11/LLWU_P11/I2C1_SDA/FTM3_CH7/I2S0_RXD1/FB_RW_b, slew_rate: fast, open_drain: enable, pull_select: up,
     pull_enable: enable}
+  - {pin_num: B8, peripheral: I2S0, signal: RX_FS, pin_signal: CMP0_IN1/PTC7/SPI0_SIN/USB0_SOF_OUT/I2S0_RX_FS/FB_AD8/SDRAM_A16}
+  - {pin_num: D7, peripheral: I2S0, signal: RX_BCLK, pin_signal: ADC1_SE5b/CMP0_IN3/PTC9/FTM3_CH5/I2S0_RX_BCLK/FB_AD6/SDRAM_A14/FTM2_FLT0}
  * BE CAREFUL MODIFYING THIS COMMENT - IT IS YAML SETTINGS FOR TOOLS ***********
  */
 /* clang-format on */
@@ -112,6 +114,12 @@ void BOARD_InitPins(void)
 
     /* PORTC6 (pin C8) is configured as I2S0_MCLK */
     PORT_SetPinMux(BOARD_I2S_MCLK_PORT, BOARD_I2S_MCLK_PIN, kPORT_MuxAlt6);
+
+    /* PORTC7 (pin B8) is configured as I2S0_RX_FS */
+    PORT_SetPinMux(BOARD_USB_SOF_OUT_PORT, BOARD_USB_SOF_OUT_PIN, kPORT_MuxAlt4);
+
+    /* PORTC9 (pin D7) is configured as I2S0_RX_BCLK */
+    PORT_SetPinMux(BOARD_LED_RED_PORT, BOARD_LED_RED_PIN, kPORT_MuxAlt4);
 
     /* PORTE11 (pin G4) is configured as I2S0_TX_FS */
     PORT_SetPinMux(BOARD_I2S_TX_WCLK_PORT, BOARD_I2S_TX_WCLK_PIN, kPORT_MuxAlt4);
