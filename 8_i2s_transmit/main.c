@@ -41,7 +41,6 @@
 #define I2C_RELEASE_BUS_COUNT 100U
 
 #define BOARD_MASTER_CLOCK_CONFIG        BOARD_MasterClockConfig
-#define BOARD_SAI_RXCONFIG(config, mode) BOARD_SAI_RXConfig(config, mode);
 #define DEMO_CODEC_DA7212
 
 /*******************************************************************************
@@ -50,8 +49,6 @@
 
 void BOARD_I2C_ReleaseBus(void);
 void BOARD_MasterClockConfig(void);
-void BOARD_SAI_RXConfig(sai_transceiver_t *config, sai_sync_mode_t sync);
-extern void BOARD_SAI_RXConfig(sai_transceiver_t *config, sai_sync_mode_t sync);
 
 /*******************************************************************************
  * Variables
@@ -61,7 +58,7 @@ da7212_config_t da7212Config = {
    .dacSource    = kDA7212_DACSourceInputStream,
    .slaveAddress = DA7212_ADDRESS,
    .protocol     = kDA7212_BusI2S,
-   .format       = {.mclk_HZ = I2S0_MCLK_SOURCE_CLOCK_HZ, .sampleRate = 16000, .bitWidth = 16},
+   .format       = {.mclk_HZ = I2S0_TX_BCLK_SOURCE_CLOCK_HZ, .sampleRate = 16000, .bitWidth = 16},
    .isMaster     = false,
 };
 codec_config_t boardCodecConfig = {.codecDevType = kCODEC_DA7212, .codecDevConfig = &da7212Config};
@@ -79,18 +76,11 @@ codec_handle_t codecHandle;
 
 void BOARD_MasterClockConfig(void)
 {
-   mclkConfig.mclkOutputEnable = true, mclkConfig.mclkHz = I2S0_MCLK_SOURCE_CLOCK_HZ;
+   mclkConfig.mclkOutputEnable = true, mclkConfig.mclkHz = I2S0_TX_BCLK_SOURCE_CLOCK_HZ;
    mclkConfig.mclkSourceClkHz = DEMO_SAI_CLK_FREQ;
    SAI_SetMasterClockConfig(I2S0_PERIPHERAL, &mclkConfig);
 }
 
-void BOARD_SAI_RXConfig(sai_transceiver_t *config, sai_sync_mode_t sync)
-{
-   config->syncMode = sync;
-   SAI_RxSetConfig(I2S0_PERIPHERAL, config);
-   SAI_RxSetBitClockRate(I2S0_PERIPHERAL, I2S0_MCLK_SOURCE_CLOCK_HZ, I2S0_TX_SAMPLE_RATE, I2S0_TX_WORD_WIDTH,
-         I2S0_TX_WORDS_PER_FRAME);
-}
 static void callback(I2S_Type *base, sai_handle_t *handle, status_t status, void *userData)
 {
    isFinished = true;
@@ -126,12 +116,6 @@ int main(void)
    /* set bit clock divider */
    SAI_TxSetBitClockRate(I2S0_PERIPHERAL, I2S0_TX_BCLK_SOURCE_CLOCK_HZ, I2S0_TX_SAMPLE_RATE, I2S0_TX_WORD_WIDTH, 
          I2S0_TX_WORDS_PER_FRAME);
-
-   /* sai rx configurations */
-   BOARD_SAI_RXCONFIG(&I2S0_Tx_config, DEMO_SAI_RX_SYNC_MODE);
-
-   /* master clock configurations */
-   BOARD_MASTER_CLOCK_CONFIG();
 
    if (CODEC_Init(&codecHandle, &boardCodecConfig) != kStatus_Success)
       assert(false);
