@@ -13,6 +13,7 @@
 #include "fsl_sai.h"
 #include "fsl_clock.h"
 #include "fsl_uart.h"
+#include "fsl_i2c.h"
 
 #if defined(__cplusplus)
 extern "C" {
@@ -29,11 +30,11 @@ extern "C" {
 /* I2S0 interrupt handler identifier. */
 #define I2S0_SERIAL_TX_IRQHANDLER I2S0_Tx_IRQHandler
 /* Master clock source frequency used for calculating the master clock divider, not available on all devices. */
-#define I2S0_MCLK_SOURCE_CLOCK_HZ 120000000UL
+#define I2S0_MCLK_SOURCE_CLOCK_HZ 12288000U
 /* Master clock value set by the user to the Master clock frequency item. */
-#define I2S0_USER_MCLK_HZ 6144000UL
+#define I2S0_USER_MCLK_HZ 12288000U
 /* Bit clock source frequency used for calculating the bit clock divider in the TxSetBitClockRate function. */
-#define I2S0_TX_BCLK_SOURCE_CLOCK_HZ 6144000UL
+#define I2S0_TX_BCLK_SOURCE_CLOCK_HZ 12288000U
 /* Sample rate used for calculating the bit clock divider in the TxSetBitClockRate function. */
 #define I2S0_TX_SAMPLE_RATE 16000UL
 /* Word width used for calculating the bit clock divider in the TxSetBitClockRate function. */
@@ -44,12 +45,20 @@ extern "C" {
 #define UART0_PERIPHERAL UART0
 /* Definition of the clock source frequency */
 #define UART0_CLOCK_SOURCE CLOCK_GetFreq(UART0_CLK_SRC)
+/* BOARD_InitPeripherals defines for I2C1 */
+/* Definition of peripheral ID */
+#define I2C1_PERIPHERAL I2C1
+/* Definition of the clock source */
+#define I2C1_CLOCK_SOURCE I2C1_CLK_SRC
+/* Definition of the clock source frequency */
+#define I2C1_CLK_FREQ CLOCK_GetFreq(I2C1_CLOCK_SOURCE)
 
 /***********************************************************************************************************************
  * Global variables
  **********************************************************************************************************************/
 extern sai_transceiver_t I2S0_Tx_config;
 extern const uart_config_t UART0_config;
+extern const i2c_master_config_t I2C1_config;
 
 /***********************************************************************************************************************
  * Initialization functions

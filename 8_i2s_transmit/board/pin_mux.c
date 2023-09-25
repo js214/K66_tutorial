@@ -40,12 +40,14 @@ BOARD_InitPins:
 - pin_list:
   - {pin_num: E10, peripheral: UART0, signal: RX, pin_signal: TSI0_CH9/PTB16/SPI1_SOUT/UART0_RX/FTM_CLKIN0/FB_AD17/SDRAM_D17/EWM_IN/TPM_CLKIN0}
   - {pin_num: E9, peripheral: UART0, signal: TX, pin_signal: TSI0_CH10/PTB17/SPI1_SIN/UART0_TX/FTM_CLKIN1/FB_AD16/SDRAM_D16/EWM_OUT_b/TPM_CLKIN1}
-  - {pin_num: K6, peripheral: TPIU, signal: SWO, pin_signal: TSI0_CH3/PTA2/UART0_TX/FTM0_CH7/I2C3_SCL/LPUART0_TX/JTAG_TDO/TRACE_SWO/EZP_DO, pull_select: down, pull_enable: disable}
-  - {pin_num: L9, peripheral: GPIOA, signal: 'GPIO, 11', pin_signal: PTA11/LLWU_P23/FTM2_CH1/MII0_RXCLK/I2C2_SDA/FTM2_QD_PHB/TPM2_CH1}
-  - {pin_num: D7, peripheral: GPIOC, signal: 'GPIO, 9', pin_signal: ADC1_SE5b/CMP0_IN3/PTC9/FTM3_CH5/I2S0_RX_BCLK/FB_AD6/SDRAM_A14/FTM2_FLT0}
-  - {pin_num: G4, peripheral: I2S0, signal: TX_FS, pin_signal: PTE11/I2C3_SCL/I2S0_TX_FS/LPUART0_RTS_b/FTM3_CH6}
-  - {pin_num: G3, peripheral: I2S0, signal: TX_BCLK, pin_signal: PTE12/I2S0_TX_BCLK/FTM3_CH7}
   - {pin_num: B11, peripheral: I2S0, signal: TXD0, pin_signal: ADC0_SE15/TSI0_CH14/PTC1/LLWU_P6/SPI0_PCS3/UART1_RTS_b/FTM0_CH0/FB_AD13/SDRAM_A21/I2S0_TXD0}
+  - {pin_num: C8, peripheral: I2S0, signal: MCLK, pin_signal: CMP0_IN0/PTC6/LLWU_P10/SPI0_SOUT/PDB0_EXTRG/I2S0_RX_BCLK/FB_AD9/SDRAM_A17/I2S0_MCLK}
+  - {pin_num: G3, peripheral: I2S0, signal: TX_BCLK, pin_signal: PTE12/I2S0_TX_BCLK/FTM3_CH7}
+  - {pin_num: G4, peripheral: I2S0, signal: TX_FS, pin_signal: PTE11/I2C3_SCL/I2S0_TX_FS/LPUART0_RTS_b/FTM3_CH6}
+  - {pin_num: C7, peripheral: I2C1, signal: SCL, pin_signal: ADC1_SE6b/PTC10/I2C1_SCL/FTM3_CH6/I2S0_RX_FS/FB_AD5/SDRAM_A13, slew_rate: fast, open_drain: enable, pull_select: up,
+    pull_enable: enable}
+  - {pin_num: B7, peripheral: I2C1, signal: SDA, pin_signal: ADC1_SE7b/PTC11/LLWU_P11/I2C1_SDA/FTM3_CH7/I2S0_RXD1/FB_RW_b, slew_rate: fast, open_drain: enable, pull_select: up,
+    pull_enable: enable}
  * BE CAREFUL MODIFYING THIS COMMENT - IT IS YAML SETTINGS FOR TOOLS ***********
  */
 /* clang-format on */
@@ -58,31 +60,12 @@ BOARD_InitPins:
  * END ****************************************************************************************************************/
 void BOARD_InitPins(void)
 {
-    /* Port A Clock Gate Control: Clock enabled */
-    CLOCK_EnableClock(kCLOCK_PortA);
     /* Port B Clock Gate Control: Clock enabled */
     CLOCK_EnableClock(kCLOCK_PortB);
     /* Port C Clock Gate Control: Clock enabled */
     CLOCK_EnableClock(kCLOCK_PortC);
     /* Port E Clock Gate Control: Clock enabled */
     CLOCK_EnableClock(kCLOCK_PortE);
-
-    /* PORTA11 (pin L9) is configured as PTA11 */
-    PORT_SetPinMux(BOARD_LED_BLUE_PORT, BOARD_LED_BLUE_PIN, kPORT_MuxAsGpio);
-
-    /* PORTA2 (pin K6) is configured as TRACE_SWO */
-    PORT_SetPinMux(BOARD_TRACE_SWO_PORT, BOARD_TRACE_SWO_PIN, kPORT_MuxAlt7);
-
-    PORTA->PCR[2] = ((PORTA->PCR[2] &
-                      /* Mask bits to zero which are setting */
-                      (~(PORT_PCR_PS_MASK | PORT_PCR_PE_MASK | PORT_PCR_ISF_MASK)))
-
-                     /* Pull Select: Internal pulldown resistor is enabled on the corresponding pin, if the
-                      * corresponding PE field is set. */
-                     | PORT_PCR_PS(kPORT_PullDown)
-
-                     /* Pull Enable: Internal pullup or pulldown resistor is not enabled on the corresponding pin. */
-                     | PORT_PCR_PE(kPORT_PullDisable));
 
     /* PORTB16 (pin E10) is configured as UART0_RX */
     PORT_SetPinMux(BOARD_DEBUG_UART_RX_PORT, BOARD_DEBUG_UART_RX_PIN, kPORT_MuxAlt3);
@@ -93,8 +76,42 @@ void BOARD_InitPins(void)
     /* PORTC1 (pin B11) is configured as I2S0_TXD0 */
     PORT_SetPinMux(BOARD_I2S_TXD_PORT, BOARD_I2S_TXD_PIN, kPORT_MuxAlt6);
 
-    /* PORTC9 (pin D7) is configured as PTC9 */
-    PORT_SetPinMux(BOARD_LED_RED_PORT, BOARD_LED_RED_PIN, kPORT_MuxAsGpio);
+    const port_pin_config_t I2C1_SCL = {/* Internal pull-up resistor is enabled */
+                                        kPORT_PullUp,
+                                        /* Fast slew rate is configured */
+                                        kPORT_FastSlewRate,
+                                        /* Passive filter is disabled */
+                                        kPORT_PassiveFilterDisable,
+                                        /* Open drain is enabled */
+                                        kPORT_OpenDrainEnable,
+                                        /* Low drive strength is configured */
+                                        kPORT_LowDriveStrength,
+                                        /* Pin is configured as I2C1_SCL */
+                                        kPORT_MuxAlt2,
+                                        /* Pin Control Register fields [15:0] are not locked */
+                                        kPORT_UnlockRegister};
+    /* PORTC10 (pin C7) is configured as I2C1_SCL */
+    PORT_SetPinConfig(BOARD_I2C1_SCL_PORT, BOARD_I2C1_SCL_PIN, &I2C1_SCL);
+
+    const port_pin_config_t I2C1_SDA = {/* Internal pull-up resistor is enabled */
+                                        kPORT_PullUp,
+                                        /* Fast slew rate is configured */
+                                        kPORT_FastSlewRate,
+                                        /* Passive filter is disabled */
+                                        kPORT_PassiveFilterDisable,
+                                        /* Open drain is enabled */
+                                        kPORT_OpenDrainEnable,
+                                        /* Low drive strength is configured */
+                                        kPORT_LowDriveStrength,
+                                        /* Pin is configured as I2C1_SDA */
+                                        kPORT_MuxAlt2,
+                                        /* Pin Control Register fields [15:0] are not locked */
+                                        kPORT_UnlockRegister};
+    /* PORTC11 (pin B7) is configured as I2C1_SDA */
+    PORT_SetPinConfig(BOARD_I2C1_SDA_PORT, BOARD_I2C1_SDA_PIN, &I2C1_SDA);
+
+    /* PORTC6 (pin C8) is configured as I2S0_MCLK */
+    PORT_SetPinMux(BOARD_I2S_MCLK_PORT, BOARD_I2S_MCLK_PIN, kPORT_MuxAlt6);
 
     /* PORTE11 (pin G4) is configured as I2S0_TX_FS */
     PORT_SetPinMux(BOARD_I2S_TX_WCLK_PORT, BOARD_I2S_TX_WCLK_PIN, kPORT_MuxAlt4);

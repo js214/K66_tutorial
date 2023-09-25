@@ -45,49 +45,23 @@ void BOARD_InitBootPins(void);
 #define BOARD_DEBUG_UART_TX_PIN_MASK (1U << 17U)      /*!<@brief PORT pin mask */
                                                       /* @} */
 
-/*! @name PORTA2 (coord K6), J9[6]/JTAG_TDO/TRACE_SWO/EZP_DO
+/*! @name PORTC1 (coord B11), J1[5]/U20[C5]/I2S_TXD
   @{ */
 
 /* Symbols to be used with PORT driver */
-#define BOARD_TRACE_SWO_PORT PORTA               /*!<@brief PORT peripheral base pointer */
-#define BOARD_TRACE_SWO_PIN 2U                   /*!<@brief PORT pin number */
-#define BOARD_TRACE_SWO_PIN_MASK (1U << 2U)      /*!<@brief PORT pin mask */
-                                                 /* @} */
-
-/*! @name PORTA11 (coord L9), LEDRGB_BLUE
-  @{ */
-
-/* Symbols to be used with GPIO driver */
-#define BOARD_LED_BLUE_GPIO GPIOA                /*!<@brief GPIO peripheral base pointer */
-#define BOARD_LED_BLUE_GPIO_PIN_MASK (1U << 11U) /*!<@brief GPIO pin mask */
-
-/* Symbols to be used with PORT driver */
-#define BOARD_LED_BLUE_PORT PORTA                /*!<@brief PORT peripheral base pointer */
-#define BOARD_LED_BLUE_PIN 11U                   /*!<@brief PORT pin number */
-#define BOARD_LED_BLUE_PIN_MASK (1U << 11U)      /*!<@brief PORT pin mask */
-                                                 /* @} */
-
-/*! @name PORTC9 (coord D7), LEDRGB_RED
-  @{ */
-
-/* Symbols to be used with GPIO driver */
-#define BOARD_LED_RED_GPIO GPIOC               /*!<@brief GPIO peripheral base pointer */
-#define BOARD_LED_RED_GPIO_PIN_MASK (1U << 9U) /*!<@brief GPIO pin mask */
-
-/* Symbols to be used with PORT driver */
-#define BOARD_LED_RED_PORT PORTC               /*!<@brief PORT peripheral base pointer */
-#define BOARD_LED_RED_PIN 9U                   /*!<@brief PORT pin number */
-#define BOARD_LED_RED_PIN_MASK (1U << 9U)      /*!<@brief PORT pin mask */
+#define BOARD_I2S_TXD_PORT PORTC               /*!<@brief PORT peripheral base pointer */
+#define BOARD_I2S_TXD_PIN 1U                   /*!<@brief PORT pin number */
+#define BOARD_I2S_TXD_PIN_MASK (1U << 1U)      /*!<@brief PORT pin mask */
                                                /* @} */
 
-/*! @name PORTE11 (coord G4), J1[3]/J38[3]/I2S_TX_WCLK
+/*! @name PORTC6 (coord C8), J1[7]/LLWU_P10/FB_AD9/I2S0_MCLK
   @{ */
 
 /* Symbols to be used with PORT driver */
-#define BOARD_I2S_TX_WCLK_PORT PORTE                /*!<@brief PORT peripheral base pointer */
-#define BOARD_I2S_TX_WCLK_PIN 11U                   /*!<@brief PORT pin number */
-#define BOARD_I2S_TX_WCLK_PIN_MASK (1U << 11U)      /*!<@brief PORT pin mask */
-                                                    /* @} */
+#define BOARD_I2S_MCLK_PORT PORTC               /*!<@brief PORT peripheral base pointer */
+#define BOARD_I2S_MCLK_PIN 6U                   /*!<@brief PORT pin number */
+#define BOARD_I2S_MCLK_PIN_MASK (1U << 6U)      /*!<@brief PORT pin mask */
+                                                /* @} */
 
 /*! @name PORTE12 (coord G3), J1[1]/J37[3]/I2S_TX_BCLK
   @{ */
@@ -98,14 +72,32 @@ void BOARD_InitBootPins(void);
 #define BOARD_I2S_TX_BCLK_PIN_MASK (1U << 12U)      /*!<@brief PORT pin mask */
                                                     /* @} */
 
-/*! @name PORTC1 (coord B11), J1[5]/U20[C5]/I2S_TXD
+/*! @name PORTE11 (coord G4), J1[3]/J38[3]/I2S_TX_WCLK
   @{ */
 
 /* Symbols to be used with PORT driver */
-#define BOARD_I2S_TXD_PORT PORTC               /*!<@brief PORT peripheral base pointer */
-#define BOARD_I2S_TXD_PIN 1U                   /*!<@brief PORT pin number */
-#define BOARD_I2S_TXD_PIN_MASK (1U << 1U)      /*!<@brief PORT pin mask */
-                                               /* @} */
+#define BOARD_I2S_TX_WCLK_PORT PORTE                /*!<@brief PORT peripheral base pointer */
+#define BOARD_I2S_TX_WCLK_PIN 11U                   /*!<@brief PORT pin number */
+#define BOARD_I2S_TX_WCLK_PIN_MASK (1U << 11U)      /*!<@brief PORT pin mask */
+                                                    /* @} */
+
+/*! @name PORTC10 (coord C7), J2[20]/U20[D8]/I2C1_SCL/DA7212_CLK
+  @{ */
+
+/* Symbols to be used with PORT driver */
+#define BOARD_I2C1_SCL_PORT PORTC                /*!<@brief PORT peripheral base pointer */
+#define BOARD_I2C1_SCL_PIN 10U                   /*!<@brief PORT pin number */
+#define BOARD_I2C1_SCL_PIN_MASK (1U << 10U)      /*!<@brief PORT pin mask */
+                                                 /* @} */
+
+/*! @name PORTC11 (coord B7), J2[18]/U20[C9]/I2C1_SDA/DA7212_SDA
+  @{ */
+
+/* Symbols to be used with PORT driver */
+#define BOARD_I2C1_SDA_PORT PORTC                /*!<@brief PORT peripheral base pointer */
+#define BOARD_I2C1_SDA_PIN 11U                   /*!<@brief PORT pin number */
+#define BOARD_I2C1_SDA_PIN_MASK (1U << 11U)      /*!<@brief PORT pin mask */
+                                                 /* @} */
 
 /*!
  * @brief Configures pin routing and optionally pin electrical features.
@@ -125,3 +117,4 @@ void BOARD_InitPins(void);
 /***********************************************************************************************************************
  * EOF
  **********************************************************************************************************************/
+

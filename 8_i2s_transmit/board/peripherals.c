@@ -112,8 +112,7 @@ instance:
       - tx_group:
         - sai_transceiver:
           - bitClock:
-            - modeM: 'master'
-            - bitClockSource: 'kSAI_BclkSourceMclkDiv'
+            - modeM: 'master' - bitClockSource: 'kSAI_BclkSourceMclkDiv'
             - bclkPolarityM: 'kSAI_PolarityActiveLow'
             - bclkInputDelayM: 'false'
           - frameSync:
@@ -206,12 +205,6 @@ sai_transceiver_t I2S0_Tx_config = {
     .dataWordNum = 2U,
     .dataMaskedWord = 0x0U
   },
-  .fifo = {
-    .fifoWatermark = 16U,
-    .fifoCombine = kSAI_FifoCombineDisabled,
-    .fifoPacking = kSAI_FifoPackingDisabled,
-    .fifoContinueOneError = false
-  }
 };
 sai_master_clock_t I2S0_MCLK_config = {
   .mclkOutputEnable = true,
@@ -223,14 +216,18 @@ sai_master_clock_t I2S0_MCLK_config = {
 static void I2S0_init(void) {
   /* Initialize SAI clock gate */
   SAI_Init(I2S0_PERIPHERAL);
+
   /* Configures SAI Tx sub-module functionality */
-  SAI_TxSetConfig(I2S0_PERIPHERAL, &I2S0_Tx_config);
+  //SAI_TxSetConfig(I2S0_PERIPHERAL, &I2S0_Tx_config);
+
   /* Set up SAI Tx bitclock rate by calculation of divider. */
   SAI_TxSetBitClockRate(I2S0_PERIPHERAL, I2S0_TX_BCLK_SOURCE_CLOCK_HZ, I2S0_TX_SAMPLE_RATE, I2S0_TX_WORD_WIDTH, I2S0_TX_WORDS_PER_FRAME);
+
   /* Initialize SAI master clock */
   SAI_SetMasterClockConfig(I2S0_PERIPHERAL, &I2S0_MCLK_config);
+
   /* Enable interrupt I2S0_Tx_IRQn request in the NVIC. */
-  EnableIRQ(I2S0_SERIAL_TX_IRQN);
+  //EnableIRQ(I2S0_SERIAL_TX_IRQN);
 }
 
 /***********************************************************************************************************************
@@ -283,6 +280,44 @@ static void UART0_init(void) {
 }
 
 /***********************************************************************************************************************
+ * I2C1 initialization code
+ **********************************************************************************************************************/
+/* clang-format off */
+/* TEXT BELOW IS USED AS SETTING FOR TOOLS *************************************
+instance:
+- name: 'I2C1'
+- type: 'i2c'
+- mode: 'I2C_Polling'
+- custom_name_enabled: 'false'
+- type_id: 'i2c_2566d7363e7e9aaedabb432110e372d7'
+- functional_group: 'BOARD_InitPeripherals'
+- peripheral: 'I2C1'
+- config_sets:
+  - fsl_i2c:
+    - i2c_mode: 'kI2C_Master'
+    - clockSource: 'BusInterfaceClock'
+    - clockSourceFreq: 'GetFreq'
+    - i2c_master_config:
+      - enableMaster: 'true'
+      - enableStopHold: 'false'
+      - baudRate_Bps: '100000'
+      - glitchFilterWidth: '0'
+    - quick_selection: 'QS_I2C_1'
+ * BE CAREFUL MODIFYING THIS COMMENT - IT IS YAML SETTINGS FOR TOOLS **********/
+/* clang-format on */
+const i2c_master_config_t I2C1_config = {
+  .enableMaster = true,
+  .enableStopHold = false,
+  .baudRate_Bps = 100000UL,
+  .glitchFilterWidth = 0U
+};
+
+static void I2C1_init(void) {
+  /* Initialization function */
+  I2C_MasterInit(I2C1_PERIPHERAL, &I2C1_config, I2C1_CLK_FREQ);
+}
+
+/***********************************************************************************************************************
  * Initialization functions
  **********************************************************************************************************************/
 void BOARD_InitPeripherals(void)
@@ -290,6 +325,7 @@ void BOARD_InitPeripherals(void)
   /* Initialize components */
   I2S0_init();
   UART0_init();
+  I2C1_init();
 }
 
 /***********************************************************************************************************************
