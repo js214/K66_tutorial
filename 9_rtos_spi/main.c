@@ -13,6 +13,9 @@
 #include "board/board.h"
 #include "board/peripherals.h"
 
+// LMX2572 register data
+#include "LMX2572_reg.h"
+
 // bit mask for controlling the FPGA
 #define ECHO_I2S_TO_SPI 0x01
 #define I2S_CHANNEL 0x02
@@ -31,6 +34,17 @@ void setup_MCU(void)
    BOARD_InitBootPeripherals();
 }
 
+
+void setup_LMX2572(void)
+{
+   for (int i=0; i<126; i++)
+      transmit_SPI(LMX2572_addr[i], LMX2572_data_h[i], LMX2572_data_l[i]);
+}
+
+
+/**
+ * Switch between PRBS and fast/slow counter every second.
+ */
 void vTask1(void *pvParameters)
 {
    while (true) {
@@ -47,14 +61,43 @@ void vTask1(void *pvParameters)
    vTaskDelete(NULL); // never reached
 }
 
+/**
+ * Handle keyboard (UART) commands
+ */
+void vTask2(void *pvParameters)
+{
+   while (1) {
+      char cmd = GETCHAR();
+      switch (cmd) {
+         case '?' : // identify the MPU board
+            PRINTF("LMX programmer code by JK.\r\n");
+            break;
+
+         case 'R' : // repeat setup of the LMX2572
+            setup_LMX2572();
+            break;
+      }
+   }
+
+   vTaskDelete(NULL); // never reached
+}
 
 int main(void)
 {
    setup_MCU();
+   setup_LMX2572();
 
    xTaskCreate(
          vTask1,   // function that implements the task
          "Task 1", // text name for the task
+         1000,     // stack depth
+         NULL,     // not using the task parameter
+         2,        // priority
+         NULL);    // not using a task handle
+
+   xTaskCreate(
+         vTask2,   // function that implements the task
+         "Task 2", // text name for the task
          1000,     // stack depth
          NULL,     // not using the task parameter
          1,        // priority

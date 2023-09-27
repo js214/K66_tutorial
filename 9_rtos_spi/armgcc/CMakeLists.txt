@@ -16,6 +16,7 @@ SET(LIBRARY_OUTPUT_PATH ${ProjDirPath}/${CMAKE_BUILD_TYPE})
 # Source code to build the main executable target
 add_executable(${MCUX_SDK_PROJECT_NAME} 
    "${ProjDirPath}/../main.c"
+   "${ProjDirPath}/../LMX2572_reg.h"
    "${ProjDirPath}/../board/board.c"
    "${ProjDirPath}/../board/board.h"
    "${ProjDirPath}/../board/pin_mux.c"
