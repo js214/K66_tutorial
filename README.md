@@ -14,6 +14,7 @@ The projects are adapted from the SDK examples:
   the SDK files needed for compilation
 - `7_rtos` is a self-contained FreeRTOS example
 - `8_i2s_transmit` demonstrates transmitting data via I2S
+- `9_rtos_spi` transmits data via SPI from an RTOS task
 
 The CMake files, and the whole directory, is much cleaner starting from
 `7_rtos` onwards. This should be the minimal starting point for future projects.
