@@ -41,32 +41,12 @@ void setup_LMX2572(void)
       transmit_SPI(LMX2572_addr[i], LMX2572_data_h[i], LMX2572_data_l[i]);
 }
 
-
 /**
- * Switch between PRBS and fast/slow counter every second.
+ * Handle keyboard (UART) commands
  */
 void vTask1(void *pvParameters)
 {
    while (true) {
-      transmit_SPI(0x80, 0x00, 0x00);
-      vTaskDelay(pdMS_TO_TICKS(1000));
-
-      transmit_SPI(0x80, 0x00, COUNTER_WIDTH0);
-      vTaskDelay(pdMS_TO_TICKS(1000));
-
-      transmit_SPI(0x80, 0x00, PRBS_ENABLE);
-      vTaskDelay(pdMS_TO_TICKS(1000));
-   }
-
-   vTaskDelete(NULL); // never reached
-}
-
-/**
- * Handle keyboard (UART) commands
- */
-void vTask2(void *pvParameters)
-{
-   while (1) {
       char cmd = GETCHAR();
       switch (cmd) {
          case '?' : // identify the MPU board
@@ -75,6 +55,35 @@ void vTask2(void *pvParameters)
 
          case 'R' : // repeat setup of the LMX2572
             setup_LMX2572();
+            break;
+
+         case '0' : // clear FPGA configuration register
+            transmit_SPI(0x80, 0x00, 0x00);
+            break;
+
+         case 'p' : // enable PRBS
+            transmit_SPI(0x80, 0x00, PRBS_ENABLE);
+            break;
+
+         case 's' : // enable slow counter
+            transmit_SPI(0x80, 0x00, COUNTER_WIDTH0);
+            break;
+
+         case 'F' : // enable FSK SPI FAST
+            transmit_SPI(0x72, 0x7C, 0x03);             // LMX: FSK_MODE_SEL=3, FSK_EN=1
+            transmit_SPI(0x7C, 0x00, 0x80);             // LMX: FSK_SPI_FAST_DEV
+            break;
+
+         case 'f' : // set FSK deviation to zero
+            transmit_SPI(0x7C, 0x00, 0x00);             // LMX: FSK_SPI_FAST_DEV
+            break;
+
+         case 'l' : // echo I2S (left channel) to SPI
+            transmit_SPI(0x80, 0x00, ECHO_I2S_TO_SPI);
+            break;
+
+         case 'r' : // echo I2S (right channel) to SPI
+            transmit_SPI(0x80, 0x00, ECHO_I2S_TO_SPI | I2S_CHANNEL);
             break;
       }
    }
@@ -90,14 +99,6 @@ int main(void)
    xTaskCreate(
          vTask1,   // function that implements the task
          "Task 1", // text name for the task
-         1000,     // stack depth
-         NULL,     // not using the task parameter
-         2,        // priority
-         NULL);    // not using a task handle
-
-   xTaskCreate(
-         vTask2,   // function that implements the task
-         "Task 2", // text name for the task
          1000,     // stack depth
          NULL,     // not using the task parameter
          1,        // priority
