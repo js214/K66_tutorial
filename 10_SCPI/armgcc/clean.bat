@@ -1,7 +1,0 @@
-if exist debug (RD /s /Q debug)
-if exist CMakeFiles (RD /s /Q CMakeFiles)
-if exist Makefile (DEL /s /Q /F Makefile)
-if exist cmake_install.cmake (DEL /s /Q /F cmake_install.cmake)
-if exist CMakeCache.txt (DEL /s /Q /F CMakeCache.txt)
-if exist build_log.txt (DEL /s /Q /F build_log.txt)
-if exist freertos (RD /s /Q freertos)

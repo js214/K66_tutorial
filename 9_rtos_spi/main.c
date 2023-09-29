@@ -98,7 +98,7 @@ void vTask1(void *pvParameters)
 
          case 'F' : // enable FSK SPI FAST
             transmit_SPI(0x72, 0x7C, 0x03);             // LMX: FSK_MODE_SEL=3, FSK_EN=1
-            transmit_SPI(0x7C, 0x00, 0x80);             // LMX: FSK_SPI_FAST_DEV
+            transmit_SPI(0x7C, 0x00, 0x01);             // LMX: FSK_SPI_FAST_DEV
             break;
 
          case 'f' : // set FSK deviation to zero

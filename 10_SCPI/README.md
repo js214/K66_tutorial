@@ -1,2 +1,0 @@
-# RTOS SPI example
-
